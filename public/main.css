@@ -1,12 +1,34 @@
 body {
-  background-color: #000000;
+  background-color: #111;
 }
 
 h1 {
   color: white;
+  text-align: center;
+  font-family: 'VT323', monospace;
+  font-size: 3em;
 }
 
 canvas {
   display : block;
   margin : auto;
+}
+
+p {
+  color: white;
+  text-align: center;
+  font-size: 1em;
+  font-family: 'VT323', monospace;
+}
+
+a {
+  color: white;
+}
+
+.sound {
+  color: #333;
+}
+
+.footer {
+  margin-top: 3%;
 }

@@ -1,4 +1,4 @@
-var game = new Phaser.Game(1200, 600, Phaser.AUTO, 'station', { preload: preload, create: create, update: update });
+var game = new Phaser.Game(1400, 600, Phaser.AUTO, 'station', { preload: preload, create: create, update: update });
 
 var synth = new Tone.MembraneSynth().toMaster();
 var pluck = new Tone.PluckSynth().toMaster();
@@ -55,7 +55,7 @@ function preload() {
 }
 
 function create() {
-  fromEdge = 1100;
+  fromEdge = 1200;
   game.renderer.clearBeforeRender = false;
   game.renderer.roundPixels = true;
 

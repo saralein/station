@@ -1,0 +1,39 @@
+{"frames": {
+
+"fLstep.png":
+{
+	"frame": {"x":0,"y":0,"w":48,"h":48},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
+	"sourceSize": {"w":48,"h":48},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"fRest.png":
+{
+	"frame": {"x":48,"y":0,"w":48,"h":48},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
+	"sourceSize": {"w":48,"h":48},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"fRstep.png":
+{
+	"frame": {"x":96,"y":0,"w":48,"h":48},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
+	"sourceSize": {"w":48,"h":48},
+	"pivot": {"x":0.5,"y":0.5}
+}},
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "chickenAtlas.png",
+	"format": "RGBA8888",
+	"size": {"w":144,"h":48},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:6d6ddab703b04b1e29484f74d7740a10:db228d4e97735812c93b3f251726cf84:2e238ee27dfc31b38bc270e83f665aa3$"
+}
+}

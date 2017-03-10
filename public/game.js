@@ -2,27 +2,95 @@ var game = new Phaser.Game(1400, 600, Phaser.AUTO, 'station', { preload: preload
 
 var synth = new Tone.MembraneSynth().toMaster();
 var pluck = new Tone.PluckSynth().toMaster();
+var chord = new Tone.PolySynth(6, Tone.Synth).toMaster();
+//set the attributes using the set interface
+chord.set("detune", -1200);
+//play a chord
+
+var rock = new Tone.DuoSynth({
+    "vibratoAmount" : 0.5,
+    "vibratoRate" : 5,
+    "portamento" : 0.1,
+    "harmonicity" : 1.005,
+    "volume" : 5,
+    "voice0" : {
+      "volume" : -2,
+      "oscillator" : {
+        "type" : "sawtooth"
+      },
+      "filter" : {
+        "Q" : 1,
+        "type" : "lowpass",
+        "rolloff" : -24
+      },
+      "envelope" : {
+        "attack" : 0.01,
+        "decay" : 0.25,
+        "sustain" : 0.4,
+        "release" : 1.2
+      },
+      "filterEnvelope" : {
+        "attack" : 0.001,
+        "decay" : 0.05,
+        "sustain" : 0.3,
+        "release" : 2,
+        "baseFrequency" : 100,
+        "octaves" : 4
+      }
+    },
+    "voice1" : {
+      "volume" : -10,
+      "oscillator" : {
+        "type" : "sawtooth"
+      },
+      "filter" : {
+        "Q" : 2,
+        "type" : "bandpass",
+        "rolloff" : -12
+      },
+      "envelope" : {
+        "attack" : 0.25,
+        "decay" : 4,
+        "sustain" : 0.1,
+        "release" : 0.8
+      },
+      "filterEnvelope" : {
+        "attack" : 0.05,
+        "decay" : 0.05,
+        "sustain" : 0.7,
+        "release" : 2,
+        "baseFrequency" : 5000,
+        "octaves" : -1.5
+      }
+    }
+  }).toMaster();
 
 //station beat
 var station = new Tone.Loop(function(time){
-  synth.triggerAttackRelease("C1", "4n", time)
-}, "4n");
+  synth.triggerAttackRelease("F5", "8t", time)
+}, "4:4");
 
 station.start();
 
-//pink alien voice
-var pinkVoice = new Tone.Part(function(time, note){
-    synth.triggerAttackRelease(note, "32n", time);
-}, [["0:2", "C2"]]);
+//pink alien
 
-pinkVoice.set({
-    "loop" : true,
-});
+  var kick = new Tone.MembraneSynth({
+    "envelope" : {
+      "sustain" : 0,
+      "attack" : 0.02,
+      "decay" : 0.8
+    },
+    "octaves" : 10
+  }).toMaster();
+
+  var pinkVoice = new Tone.Loop(function(time){
+    kick.triggerAttackRelease("C2", "8n", time);
+  }, "2n");
 
 //yellow alien voice
 var yellowVoice = new Tone.Event(function(time, pitch) {
   synth.triggerAttackRelease(440, "32n", time);
-}, "F6");
+}, [["2:2", "F6"]]);
 
 yellowVoice.set({
     "loop" : true,
@@ -37,8 +105,38 @@ greenVoice.set({
     "loop" : true,
 });
 
-let alienPink, graphics;
+    var snare = new Tone.NoiseSynth({
+      "volume" : -5,
+      "envelope" : {
+        "attack" : 0.001,
+        "decay" : 0.2,
+        "sustain" : 0
+      },
+      "filterEnvelope" : {
+        "attack" : 0.001,
+        "decay" : 0.1,
+        "sustain" : 0
+      }
+    }).toMaster();
+    var blueVoice = new Tone.Loop(function(time){
+      snare.triggerAttack(time);
+    }, "2n");
 
+// var blueVoice = new Tone.Loop(function(){
+//   chord.triggerAttackRelease(["C4", "E4", "A4"], "32n + 4t");
+// });
+
+// var beigeVoice = new Tone.Pattern(function(time, note){
+//     synth.triggerAttackRelease(note, time);
+// }, [["C4", "4n"], ["E4", "8n"], ["G4", "4n"], ["A4", "4n"]]);
+
+//var beigeVoice = new MusicalScale({ key: 'G', mode: 'locrian' });
+
+var beigeVoice = new Tone.Pattern(function(time, note){
+    synth.triggerAttackRelease(note, 0.25);
+}, ["C4", "E4", "G4", "A4"]);
+
+let alienPink, alienYellow, circle0, circle1, currentTempo = 300;
 
 function preload() {
   game.load.image('alienGreen', 'images/aliens/alienGreen_float.png');
@@ -52,6 +150,7 @@ function preload() {
   game.load.image('alienYellowLogo', 'images/aliens/alienYellow_port.png');
   game.load.image('alienBlueLogo', 'images/aliens/alienBlue_port.png');
   game.load.image('station', 'images/station.png');
+  game.load.image('meteor', 'images/meteor.png')
 }
 
 function create() {
@@ -59,12 +158,12 @@ function create() {
   game.renderer.clearBeforeRender = false;
   game.renderer.roundPixels = true;
 
-  var circle0 = game.add.graphics(0, 0);
+  circle0 = game.add.graphics(0, 0);
 
   circle0.lineStyle(2, 0x333333, 1);
   circle0.drawCircle(game.world.centerX, game.world.centerY, 175);
 
-  var circle1 = game.add.graphics(0, 0);
+  circle1 = game.add.graphics(0, 0);
 
   circle1.lineStyle(2, 0x333333, 1);
   circle1.drawCircle(game.world.centerX, game.world.centerY, 450);
@@ -81,6 +180,8 @@ function create() {
 
   station = game.add.sprite(game.world.centerX - 62, game.world.centerY - 175, 'station');
 
+  meteor = game.add.sprite(145, 450, 'meteor');
+  meteor.scale.setTo(0.5, 0.5);
   alienPinkPort = game.add.sprite(fromEdge, game.world.centerY - 173.5, 'alienPinkLogo');
   alienYellowPort = game.add.sprite(fromEdge, game.world.centerY - 98.5, 'alienYellowLogo');
   alienGreenPort = game.add.sprite(fromEdge, game.world.centerY - 23.5, 'alienGreenLogo');
@@ -90,7 +191,7 @@ function create() {
   //game.physics.enable(alienGreen, Phaser.Physics.ARCADE);
 
   //aliens in space
-  alienPink = game.add.sprite(100, 100, 'alienPink');
+  alienPink = game.add.sprite(920, 75, 'alienPink');
   alienPink.visible = false;
   alienPink.anchor.x = 0.5;
   alienPink.anchor.y = 0.5;
@@ -122,18 +223,24 @@ function create() {
 
   alienBluePort.inputEnabled = true;
   alienBluePort.input.useHandCursor = true;
-  alienBluePort.events.onInputDown.add(() => generateSprite(alienBlue, yellowVoice), this);
+  alienBluePort.events.onInputDown.add(() => generateSprite(alienBlue, blueVoice), this);
 
   alienBeigePort.inputEnabled = true;
   alienBeigePort.input.useHandCursor = true;
-  alienBeigePort.events.onInputDown.add(() => generateSprite(alienBeige, yellowVoice), this);
+  alienBeigePort.events.onInputDown.add(() => generateSprite(alienBeige, beigeVoice), this);
 
   //alien dragging
+  meteor.inputEnabled = true;
+  meteor.input.enableDrag(true);
+  meteor.events.onInputDown.add(waver, this);
+  meteor.events.onInputUp.add(stopper, this);
+
   alienPink.inputEnabled = true;
   alienPink.input.enableDrag(true);
 
   alienYellow.inputEnabled = true;
   alienYellow.input.enableDrag(true);
+  alienYellow.events.onInputUp.add(mouseCords, this);
 
   alienGreen.inputEnabled = true;
   alienGreen.input.enableDrag(true);
@@ -144,48 +251,44 @@ function create() {
   alienBeige.inputEnabled = true;
   alienBeige.input.enableDrag(true);
 
-  // var graphics = game.add.graphics(game.world.centerX, game.world.centerY);
+  Tone.Transport.start('+0.1');
+  Tone.Transport.bpm.rampTo(currentTempo, 4);
+}
 
-  //   // set a fill and line style
-  //   graphics.beginFill(0xFF3300);
-  //   graphics.lineStyle(2, 0xFFFFFF, 1);
+var synthNotes = ["C2", "E2", "G2", "A2",
+            "C3", "D3", "E3", "G3", "A3", "B3",
+            "C4", "D4", "E4", "G4", "A4", "B4", "C5"];
+var lastSynthNote = synthNotes[0];
 
-  //   // draw a shape
-  //   //graphics.moveTo(game.world.centerX, game.world.centerY);
-  //   graphics.lineTo(alienPink.x - game.world.centerX, alienPink.y - game.world.centerY);
-  //   graphics.endFill();
+function waver () {
+  let pos = game.input.mousePointer.x;
 
-  //   station.bringToTop();
-  //   alienPink.bringToTop();
+  if (pos < 83) {
+    lastSynthNote = synthNotes[0];
+  }
+  if (pos > 83) {
+    lastSynthNote = synthNotes[1];
+  }
 
-  Tone.Transport.start('+0.1')
+  rock.triggerAttack(lastSynthNote);
+}
+
+function stopper() {
+  rock.triggerRelease();
+}
+
+function mouseCords() {
+  console.log(game.input.mousePointer.x, game.input.mousePointer.y);
 }
 
 function generateSprite(sprite, voice) {
   sprite.visible = !sprite.visible;
   if (sprite.visible) {
-    voice.start();
+    voice.start("+1m");
+    //voice.bpm.rampTo(currentTempo, 4)
   } else {
     voice.stop();
   }
 }
 
-function update() {
-
-  if (alienPink.visible) {
-  graphics = game.add.graphics(game.world.centerX, game.world.centerY);
-
-    // set a fill and line style
-    graphics.beginFill(0xFF3300);
-    graphics.lineStyle(2, 0xFFFFFF, 1);
-
-    // draw a shape
-    //graphics.moveTo(game.world.centerX, game.world.centerY);
-    graphics.lineTo(alienPink.x - game.world.centerX, alienPink.y - game.world.centerY);
-    graphics.endFill();
-
-    station.bringToTop();
-    alienPink.bringToTop();
-  }
-
-}
+function update() {}

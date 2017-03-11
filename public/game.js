@@ -1,4 +1,13 @@
-var game = new Phaser.Game(1400, 600, Phaser.AUTO, 'station', { preload: preload, create: create, update: update });
+let width = 1400,
+    height = 600,
+    // alienPink,
+    // alienYellow,
+    // circle0,
+    // circle1,
+    currentTempo = 120,
+    meteorPressed = false;
+
+var game = new Phaser.Game(width, height, Phaser.AUTO, 'station', { preload: preload, create: create, update: update });
 
 var synth = new Tone.MembraneSynth().toMaster();
 var pluck = new Tone.PluckSynth().toMaster();
@@ -8,19 +17,19 @@ chord.set("detune", -1200);
 //play a chord
 
 var rock = new Tone.DuoSynth({
-    "vibratoAmount" : 0.5,
+    "vibratoAmount" : 0,
     "vibratoRate" : 5,
     "portamento" : 0.1,
     "harmonicity" : 1.005,
-    "volume" : 5,
+    "volume" : -10,
     "voice0" : {
-      "volume" : -2,
+      "volume" : -12,
       "oscillator" : {
         "type" : "sawtooth"
       },
       "filter" : {
         "Q" : 1,
-        "type" : "lowpass",
+        "type" : "lowshelf",
         "rolloff" : -24
       },
       "envelope" : {
@@ -39,13 +48,13 @@ var rock = new Tone.DuoSynth({
       }
     },
     "voice1" : {
-      "volume" : -10,
+      "volume" : -25,
       "oscillator" : {
         "type" : "sawtooth"
       },
       "filter" : {
         "Q" : 2,
-        "type" : "bandpass",
+        "type" : "peaking",
         "rolloff" : -12
       },
       "envelope" : {
@@ -66,11 +75,11 @@ var rock = new Tone.DuoSynth({
   }).toMaster();
 
 //station beat
-var station = new Tone.Loop(function(time){
-  synth.triggerAttackRelease("F5", "8t", time)
-}, "4:4");
+// var station = new Tone.Loop(function(time){
+//   synth.triggerAttackRelease("F5", "8t", time)
+// }, "4:4");
 
-station.start();
+// station.start();
 
 //pink alien
 
@@ -84,7 +93,7 @@ station.start();
   }).toMaster();
 
   var pinkVoice = new Tone.Loop(function(time){
-    kick.triggerAttackRelease("C2", "8n", time);
+    kick.triggerAttackRelease("C2", "16n", time);
   }, "2n");
 
 //yellow alien voice
@@ -118,7 +127,8 @@ greenVoice.set({
         "sustain" : 0
       }
     }).toMaster();
-    var blueVoice = new Tone.Loop(function(time){
+
+var blueVoice = new Tone.Loop(function(time){
       snare.triggerAttack(time);
     }, "2n");
 
@@ -136,8 +146,6 @@ var beigeVoice = new Tone.Pattern(function(time, note){
     synth.triggerAttackRelease(note, 0.25);
 }, ["C4", "E4", "G4", "A4"]);
 
-let alienPink, alienYellow, circle0, circle1, currentTempo = 300;
-
 function preload() {
   game.load.image('alienGreen', 'images/aliens/alienGreen_float.png');
   game.load.image('alienPink', 'images/aliens/alienPink_float.png');
@@ -150,7 +158,8 @@ function preload() {
   game.load.image('alienYellowLogo', 'images/aliens/alienYellow_port.png');
   game.load.image('alienBlueLogo', 'images/aliens/alienBlue_port.png');
   game.load.image('station', 'images/station.png');
-  game.load.image('meteor', 'images/meteor.png')
+  game.load.image('meteor', 'images/meteor.png');
+  game.load.image('play', 'images/play.png');
 }
 
 function create() {
@@ -180,6 +189,9 @@ function create() {
 
   station = game.add.sprite(game.world.centerX - 62, game.world.centerY - 175, 'station');
 
+  play = game.add.sprite(game.world.centerX, 540, 'play');
+  play.anchor.x = 0.5;
+  play.scale.setTo(0.5, 0.5);
   meteor = game.add.sprite(145, 450, 'meteor');
   meteor.scale.setTo(0.5, 0.5);
   alienPinkPort = game.add.sprite(fromEdge, game.world.centerY - 173.5, 'alienPinkLogo');
@@ -232,8 +244,8 @@ function create() {
   //alien dragging
   meteor.inputEnabled = true;
   meteor.input.enableDrag(true);
-  meteor.events.onInputDown.add(waver, this);
-  meteor.events.onInputUp.add(stopper, this);
+  meteor.events.onInputDown.add(startMeteor, this);
+  meteor.events.onInputUp.add(stopMeteor, this);
 
   alienPink.inputEnabled = true;
   alienPink.input.enableDrag(true);
@@ -256,24 +268,18 @@ function create() {
 }
 
 var synthNotes = ["C2", "E2", "G2", "A2",
-            "C3", "D3", "E3", "G3", "A3", "B3",
-            "C4", "D4", "E4", "G4", "A4", "B4", "C5"];
+                  "C3", "D3", "E3", "G3",
+                  "A3", "B3", "C4", "D4",
+                  "E4", "G4", "A4", "B4",
+                  "C5"];
 var lastSynthNote = synthNotes[0];
 
-function waver () {
-  let pos = game.input.mousePointer.x;
-
-  if (pos < 83) {
-    lastSynthNote = synthNotes[0];
-  }
-  if (pos > 83) {
-    lastSynthNote = synthNotes[1];
-  }
-
-  rock.triggerAttack(lastSynthNote);
+function startMeteor () {
+  meteorPressed = true;
 }
 
-function stopper() {
+function stopMeteor() {
+  meteorPressed = false;
   rock.triggerRelease();
 }
 
@@ -291,4 +297,132 @@ function generateSprite(sprite, voice) {
   }
 }
 
-function update() {}
+function update() {
+  if (meteorPressed == true) {
+    let x = game.input.mousePointer.x,
+        y = game.input.mousePointer.y,
+        l = synthNotes.length,
+        band = width/l,
+        stripe = height/7,
+        val = 0;
+
+    if (x < band) {
+      rock.setNote(synthNotes[0]);
+      lastSynthNote = synthNotes[0];
+      //rock.triggerAttack(lastSynthNote);
+    }
+    if (x > band && x < 2 * band) {
+      rock.setNote(synthNotes[1]);
+      lastSynthNote = synthNotes[1];
+      //rock.triggerAttack(lastSynthNote);
+    }
+    if (x > 2 * band && x < 3 * band) {
+      rock.setNote(synthNotes[2]);
+      lastSynthNote = synthNotes[2];
+    }
+
+    if (x > 3 * band && x < 4 * band) {
+      rock.setNote(synthNotes[3]);
+      lastSynthNote = synthNotes[3];
+    }
+
+    if (x > 4 * band && x < 5 * band) {
+      rock.setNote(synthNotes[4]);
+      lastSynthNote = synthNotes[4];
+    }
+
+    if (x > 5 * band && x < 6 * band) {
+      rock.setNote(synthNotes[5]);
+      lastSynthNote = synthNotes[5];
+    }
+
+    if (x > 6 * band && x < 7 * band) {
+      rock.setNote(synthNotes[6]);
+      lastSynthNote = synthNotes[6];
+    }
+
+    if (x > 7 * band && x < 8 * band) {
+      rock.setNote(synthNotes[7]);
+      lastSynthNote = synthNotes[7];
+    }
+
+    if (x > 8 * band && x < 9 * band) {
+      rock.setNote(synthNotes[8]);
+      lastSynthNote = synthNotes[8];
+    }
+
+    if (x > 9 * band && x < 10 * band) {
+      rock.setNote(synthNotes[9]);
+      lastSynthNote = synthNotes[9];
+    }
+
+    if (x > 10 * band && x < 11 * band) {
+      rock.setNote(synthNotes[10]);
+      lastSynthNote = synthNotes[10];
+    }
+
+    if (x > 11 * band && x < 12 * band) {
+      rock.setNote(synthNotes[11]);
+      lastSynthNote = synthNotes[11];
+    }
+
+    if (x > 12 * band && x < 13 * band) {
+      rock.setNote(synthNotes[12]);
+      lastSynthNote = synthNotes[12];
+    }
+
+    if (x > 13 * band && x < 14 * band) {
+      rock.setNote(synthNotes[13]);
+      lastSynthNote = synthNotes[13];
+    }
+
+    if (x > 14 * band && x < 15 * band) {
+      rock.setNote(synthNotes[14]);
+      lastSynthNote = synthNotes[14];
+    }
+
+    if (x > 15 * band && x < 16 * band) {
+      rock.setNote(synthNotes[15]);
+      lastSynthNote = synthNotes[15];
+    }
+
+    if (x > 16 * band) {
+      rock.setNote(synthNotes[16]);
+      lastSynthNote = synthNotes[16];
+    }
+
+    if (y < stripe) {
+      rock.vibratoAmount.value = val;
+    }
+
+    if (y > stripe && y < 2 * stripe) {
+      rock.vibratoAmount.value = val + 1;
+    }
+
+    if (y > 2 * stripe && y < 3 * stripe) {
+      rock.vibratoAmount.value = val + 2;
+    }
+
+    if (y > 3 * stripe && y < 4 * stripe) {
+      rock.vibratoAmount.value = val + 3;
+    }
+
+    if (y > 4 * stripe && y < 5 * stripe) {
+      rock.vibratoAmount.value = val + 4;
+    }
+
+    if (y > 5 * stripe && y < 6 * stripe) {
+      rock.vibratoAmount.value = val + 5;
+    }
+
+    if (y > 6 * stripe && y < 7 * stripe) {
+      rock.vibratoAmount.value = val + 6;
+    }
+
+    if (y > 7 * stripe) {
+      rock.vibratoAmount.value = val + 7;
+    }
+
+    rock.triggerAttack(lastSynthNote);
+  }
+}

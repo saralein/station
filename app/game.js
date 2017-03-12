@@ -30,7 +30,28 @@ let width = 1400,
     alienGreen,
     alienBlue,
     alienBeige,
-    timer;
+    xCoord,
+    yCoord,
+    pink = {
+      voices: pinkVoice,
+      current: pinkVoice.circle2,
+    },
+    yellow = {
+      voices: yellowVoice,
+      current: yellowVoice.circle3,
+    },
+    green = {
+      voices: greenVoice,
+      current: greenVoice.circle1,
+    },
+    blue = {
+      voices: blueVoice,
+      current: blueVoice.circle2,
+    },
+    beige = {
+      voices: beigeVoice,
+      current: beigeVoice.circle3,
+    };
 
 var game = new Phaser.Game(width, height, Phaser.AUTO, 'station', { preload: preload, create: create, update: update });
 
@@ -60,22 +81,20 @@ function create() {
   circle0 = game.add.graphics(0, 0);
   circle0.lineStyle(2, 0x333333, 1);
   circle0.drawCircle(game.world.centerX, game.world.centerY, 175);
-  game.physics.enable(circle0, Phaser.Physics.ARCADE);
+  circle0.inputEnabled = true;
+  //circle0.events.onInputOver.add(over, this)
 
   circle1 = game.add.graphics(0, 0);
   circle1.lineStyle(2, 0x333333, 1);
   circle1.drawCircle(game.world.centerX, game.world.centerY, 450);
-  game.physics.enable(circle1, Phaser.Physics.ARCADE);
 
   circle2 = game.add.graphics(0, 0);
   circle2.lineStyle(2, 0x333333, 1);
   circle2.drawCircle(game.world.centerX, game.world.centerY, 800);
-  game.physics.enable(circle2, Phaser.Physics.ARCADE);
 
   circle3 = game.add.graphics(0, 0);
   circle3.lineStyle(2, 0x333333, 1);
   circle3.drawCircle(game.world.centerX, game.world.centerY, 1250);
-  game.physics.enable(circle3, Phaser.Physics.ARCADE);
 
   station = game.add.sprite(game.world.centerX, game.world.centerY, 'station');
   station.anchor.setTo(0.5, 0.5);
@@ -127,43 +146,56 @@ function create() {
   //aliens in space
   alienPink = game.add.sprite(920, 75, 'alienPink');
   alienPink.visible = false;
-  alienPink.anchor.x = 0.5;
-  alienPink.anchor.y = 0.5;
+  alienPink.anchor.setTo(0.5, 0.5);
   alienPink.inputEnabled = true;
   alienPink.input.enableDrag(true);
+  alienPink.events.onInputUp.add(() => setCurrentAlien(pinkVoice, pink));
+  //game.physics.enable(alienPink, Phaser.Physics.ARCADE);
 
-  alienYellow = game.add.sprite(100, 100, 'alienYellow');
+  alienYellow = game.add.sprite(150, 215, 'alienYellow');
   alienYellow.visible = false;
+  alienYellow.inputEnabled = true;
+  alienYellow.input.enableDrag(true);
+  alienYellow.events.onInputUp.add(() => setCurrentAlien(yellowVoice, yellow));
 
-  alienGreen = game.add.sprite(100, 100, 'alienGreen');
+  alienGreen = game.add.sprite(790, 340, 'alienGreen');
   alienGreen.visible = false;
+  alienGreen.inputEnabled = true;
+  alienGreen.input.enableDrag(true);
+  alienGreen.events.onInputUp.add(() => setCurrentAlien(greenVoice, green));
 
-  alienBlue = game.add.sprite(100, 100, 'alienBlue');
+  alienBlue = game.add.sprite(400, 90, 'alienBlue');
   alienBlue.visible = false;
+  alienBlue.inputEnabled = true;
+  alienBlue.input.enableDrag(true);
+  alienBlue.events.onInputUp.add(() => setCurrentAlien(blueVoice, blue));
 
-  alienBeige = game.add.sprite(100, 100, 'alienBeige');
+  alienBeige = game.add.sprite(1075, 475, 'alienBeige');
   alienBeige.visible = false;
+  alienBeige.inputEnabled = true;
+  alienBeige.input.enableDrag(true);
+  alienBeige.events.onInputUp.add(() => setCurrentAlien(beigeVoice, beige));
 
   //aliens at port
   alienPinkPort.inputEnabled = true;
   alienPinkPort.input.useHandCursor = true;
-  alienPinkPort.events.onInputDown.add(() => generateSprite(alienPink, pinkVoice), this);
+  alienPinkPort.events.onInputDown.add(() => generateSprite(alienPink, pink), this);
 
   alienYellowPort.inputEnabled = true;
   alienYellowPort.input.useHandCursor = true;
-  alienYellowPort.events.onInputDown.add(() => generateSprite(alienYellow, yellowVoice), this);
+  alienYellowPort.events.onInputDown.add(() => generateSprite(alienYellow, yellow), this);
 
   alienGreenPort.inputEnabled = true;
   alienGreenPort.input.useHandCursor = true;
-  alienGreenPort.events.onInputDown.add(() => generateSprite(alienGreen, greenVoice), this);
+  alienGreenPort.events.onInputDown.add(() => generateSprite(alienGreen, green), this);
 
   alienBluePort.inputEnabled = true;
   alienBluePort.input.useHandCursor = true;
-  alienBluePort.events.onInputDown.add(() => generateSprite(alienBlue, blueVoice), this);
+  alienBluePort.events.onInputDown.add(() => generateSprite(alienBlue, blue), this);
 
   alienBeigePort.inputEnabled = true;
   alienBeigePort.input.useHandCursor = true;
-  alienBeigePort.events.onInputDown.add(() => generateSprite(alienBeige, beigeVoice), this);
+  alienBeigePort.events.onInputDown.add(() => generateSprite(alienBeige, beige), this);
 
   //alien dragging
   meteor.inputEnabled = true;
@@ -173,7 +205,7 @@ function create() {
 
   alienYellow.inputEnabled = true;
   alienYellow.input.enableDrag(true);
-  //alienYellow.events.onInputUp.add(mouseCords, this);
+  alienYellow.events.onInputUp.add(mouseCords, this);
 
   alienGreen.inputEnabled = true;
   alienGreen.input.enableDrag(true);
@@ -187,8 +219,39 @@ function create() {
   Tone.Transport.start('+0.1');
   Tone.Transport.bpm.rampTo(currentTempo, 0);
 
-  // timer = game.time.create();
-  // timer.start();
+}
+
+function setCurrentAlien(voice, obj) {
+  obj.current.stop();
+  mouseCords();
+  collisionHandler(voice, obj, xCoord, yCoord);
+}
+
+function collisionHandler(voice, obj, xCoord, yCoord) {
+
+  if (circle0.getBounds().contains(xCoord, yCoord)){
+    obj.current = voice.circle0;
+    obj.current.start("@1m");
+  } else if (circle1.getBounds().contains(xCoord, yCoord)) {
+    obj.current = voice.circle1;
+    obj.current.start("@1m");
+  } else if (circle2.getBounds().contains(xCoord, yCoord)) {
+    obj.current = voice.circle2;
+    obj.current.start("@1m");
+  } else if (circle3.getBounds().contains(xCoord, yCoord)) {
+    obj.current = voice.circle3;
+    obj.current.start("@1m");
+  }
+}
+
+function mouseCords() {
+  [xCoord, yCoord] = [game.input.mousePointer.x, game.input.mousePointer.y];
+  console.log('X', xCoord);
+  console.log('Y', yCoord);
+}
+
+function over() {
+  console.log('yes');
 }
 
 function tempo(action) {
@@ -305,16 +368,20 @@ function stopMeteor() {
 //   console.log(game.input.mousePointer.x, game.input.mousePointer.y);
 // }
 
-function generateSprite(sprite, voice) {
+function generateSprite(sprite, obj) {
   sprite.visible = !sprite.visible;
   if (sprite.visible) {
-    voice.start("(@1m)");
+    obj.current.start("(@1m)");
   } else {
-    voice.stop();
+    obj.current.stop();
   }
 }
 
+
 function update() {
+
+  //game.physics.arcade.overlap(circle0, alienPink, () => collisionHandler(alienPink, currentPinkVoice), null, this);
+
   if (meteorPressed == true) {
     let x = game.input.mousePointer.x,
         y = game.input.mousePointer.y,

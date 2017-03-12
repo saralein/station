@@ -7,26 +7,58 @@ var kick = new Tone.MembraneSynth({
   "octaves" : 10
 }).toMaster();
 
-// var pinkVoice = new Tone.Loop(function(time){
-//   kick0.triggerAttackRelease("C2", "32n", time);
-// }, "(@1m) + 4n");
+let melody0 = [
+  ['0:1:4', 'C2'],
+  ['0:2:4', 'C2'],
+];
 
-// var pinkVoice = new Tone.Loop(function(time) {
-//   kick.triggerAttackRelease("C2", "4n", time);
-// }, "0:3:0");
+var voice0 = new Tone.Part(function(time, note) {
+  kick.triggerAttackRelease(note, "32n", time);
+}, melody0);
 
+voice0.loop = true;
+voice0.volume = 30;
 
-// var pinkVoice = new Tone.Pattern(function(time, note){
-//     kick.triggerAttackRelease(note, 0.75);
-// }, [["C2"], ["C2"], ["C2"], ["C2"]]);
+let melody1 = [
+  ['0:1:4', 'C2'],
+  ['0:2:2', 'C2']
+];
 
+var voice1 = new Tone.Part(function(time, note) {
+  kick.triggerAttackRelease(note, "16n", time);
+}, melody1);
 
-var pinkVoice = new Tone.Loop(function(time) {
-  kick.triggerAttackRelease("C2", "32n", time);
-}, "0:1:0");
+voice1.loop = true;
+voice1.volume = 30;
 
-var pinkVoice1 = new Tone.Loop(function(time) {
-  kick.triggerAttackRelease("C2", "32n", time);
-}, "0:2:0");
+let melody2 = [
+  ['0:1:2', 'C2'],
+  ['0:3:2', 'C2']
+];
+
+var voice2 = new Tone.Part(function(time, note) {
+  kick.triggerAttackRelease(note, "32n", time);
+}, melody2);
+
+voice2.loop = true;
+voice2.volume = 30;
+
+let melody3 = [
+  ['0:1:4', 'C2']
+];
+
+var voice3 = new Tone.Part(function(time, note) {
+  kick.triggerAttackRelease(note, "32", time);
+}, melody3);
+
+voice3.loop = true;
+voice3.volume = 30;
+
+let pinkVoice = {
+  circle0: voice0,
+  circle1: voice1,
+  circle2: voice2,
+  circle3: voice3,
+}
 
 export default pinkVoice;

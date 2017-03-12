@@ -91,14 +91,45 @@ var C_chord = ['C4', 'E4', 'G4', 'B4'];
 var D_chord = ['D4', 'F4', 'A4', 'C5'];
 var G_chord = ['B3', 'D4', 'E4', 'A4'];
 
-var chordMelody = [['0:0:2', C_chord], ['0:1:0', C_chord], ['0:1:3', D_chord], ['0:2:2', C_chord], ['0:3:0', C_chord], ['0:3:2', G_chord]];
+var melody0 = [['0:1:1', C_chord], ['0:1:2', D_chord], ['0:1:4', G_chord], ['0:2:2', C_chord]];
 
 var beigeSynth = new Tone.PolySynth().toMaster();
-var beigeVoice = new Tone.Part(function (time, note) {
+var voice0 = new Tone.Part(function (time, note) {
   beigeSynth.triggerAttackRelease(note, '16n', time);
-}, chordMelody);
+}, melody0);
 
-beigeVoice.loop = true;
+voice0.loop = true;
+
+var melody1 = [['0:1:2', C_chord], ['0:2:2', C_chord], ['0:3:0', C_chord], ['0:3:2', G_chord], ['0:3:3', D_chord], ['0:4:2', D_chord]];
+
+var voice1 = new Tone.Part(function (time, note) {
+  beigeSynth.triggerAttackRelease(note, '16n', time);
+}, melody1);
+
+voice1.loop = true;
+
+var melody2 = [['0:1:2', C_chord], ['0:2:2', D_chord], ['0:3:0', G_chord], ['0:3:2', D_chord], ['0:3:4', C_chord]];
+
+var voice2 = new Tone.Part(function (time, note) {
+  beigeSynth.triggerAttackRelease(note, '16n', time);
+}, melody2);
+
+voice2.loop = true;
+
+var melody3 = [['0:1:2', C_chord], ['0:2:2', C_chord], ['0:3:1', D_chord]];
+
+var voice3 = new Tone.Part(function (time, note) {
+  beigeSynth.triggerAttackRelease(note, '16n', time);
+}, melody3);
+
+voice3.loop = true;
+
+var beigeVoice = {
+  circle0: voice0,
+  circle1: voice1,
+  circle2: voice2,
+  circle3: voice3
+};
 
 exports.default = beigeVoice;
 
@@ -229,7 +260,28 @@ var width = 1400,
     alienGreen = void 0,
     alienBlue = void 0,
     alienBeige = void 0,
-    timer = void 0;
+    xCoord = void 0,
+    yCoord = void 0,
+    pink = {
+  voices: _pinkVocals2.default,
+  current: _pinkVocals2.default.circle2
+},
+    yellow = {
+  voices: _yellowVocals2.default,
+  current: _yellowVocals2.default.circle3
+},
+    green = {
+  voices: _greenVocals2.default,
+  current: _greenVocals2.default.circle1
+},
+    blue = {
+  voices: _blueVocals2.default,
+  current: _blueVocals2.default.circle2
+},
+    beige = {
+  voices: _beigeVocals2.default,
+  current: _beigeVocals2.default.circle3
+};
 
 var game = new Phaser.Game(width, height, Phaser.AUTO, 'station', { preload: preload, create: create, update: update });
 
@@ -259,22 +311,20 @@ function create() {
   circle0 = game.add.graphics(0, 0);
   circle0.lineStyle(2, 0x333333, 1);
   circle0.drawCircle(game.world.centerX, game.world.centerY, 175);
-  game.physics.enable(circle0, Phaser.Physics.ARCADE);
+  circle0.inputEnabled = true;
+  //circle0.events.onInputOver.add(over, this)
 
   circle1 = game.add.graphics(0, 0);
   circle1.lineStyle(2, 0x333333, 1);
   circle1.drawCircle(game.world.centerX, game.world.centerY, 450);
-  game.physics.enable(circle1, Phaser.Physics.ARCADE);
 
   circle2 = game.add.graphics(0, 0);
   circle2.lineStyle(2, 0x333333, 1);
   circle2.drawCircle(game.world.centerX, game.world.centerY, 800);
-  game.physics.enable(circle2, Phaser.Physics.ARCADE);
 
   circle3 = game.add.graphics(0, 0);
   circle3.lineStyle(2, 0x333333, 1);
   circle3.drawCircle(game.world.centerX, game.world.centerY, 1250);
-  game.physics.enable(circle3, Phaser.Physics.ARCADE);
 
   station = game.add.sprite(game.world.centerX, game.world.centerY, 'station');
   station.anchor.setTo(0.5, 0.5);
@@ -330,52 +380,75 @@ function create() {
   //aliens in space
   alienPink = game.add.sprite(920, 75, 'alienPink');
   alienPink.visible = false;
-  alienPink.anchor.x = 0.5;
-  alienPink.anchor.y = 0.5;
+  alienPink.anchor.setTo(0.5, 0.5);
   alienPink.inputEnabled = true;
   alienPink.input.enableDrag(true);
+  alienPink.events.onInputUp.add(function () {
+    return setCurrentAlien(_pinkVocals2.default, pink);
+  });
+  //game.physics.enable(alienPink, Phaser.Physics.ARCADE);
 
-  alienYellow = game.add.sprite(100, 100, 'alienYellow');
+  alienYellow = game.add.sprite(150, 215, 'alienYellow');
   alienYellow.visible = false;
+  alienYellow.inputEnabled = true;
+  alienYellow.input.enableDrag(true);
+  alienYellow.events.onInputUp.add(function () {
+    return setCurrentAlien(_yellowVocals2.default, yellow);
+  });
 
-  alienGreen = game.add.sprite(100, 100, 'alienGreen');
+  alienGreen = game.add.sprite(790, 340, 'alienGreen');
   alienGreen.visible = false;
+  alienGreen.inputEnabled = true;
+  alienGreen.input.enableDrag(true);
+  alienGreen.events.onInputUp.add(function () {
+    return setCurrentAlien(_greenVocals2.default, green);
+  });
 
-  alienBlue = game.add.sprite(100, 100, 'alienBlue');
+  alienBlue = game.add.sprite(400, 90, 'alienBlue');
   alienBlue.visible = false;
+  alienBlue.inputEnabled = true;
+  alienBlue.input.enableDrag(true);
+  alienBlue.events.onInputUp.add(function () {
+    return setCurrentAlien(_blueVocals2.default, blue);
+  });
 
-  alienBeige = game.add.sprite(100, 100, 'alienBeige');
+  alienBeige = game.add.sprite(1075, 475, 'alienBeige');
   alienBeige.visible = false;
+  alienBeige.inputEnabled = true;
+  alienBeige.input.enableDrag(true);
+  alienBeige.events.onInputUp.add(function () {
+    return setCurrentAlien(_beigeVocals2.default, beige);
+  });
 
   //aliens at port
   alienPinkPort.inputEnabled = true;
   alienPinkPort.input.useHandCursor = true;
   alienPinkPort.events.onInputDown.add(function () {
-    return generateSprite(alienPink, _pinkVocals2.default);
+    return generateSprite(alienPink, pink);
   }, this);
 
   alienYellowPort.inputEnabled = true;
   alienYellowPort.input.useHandCursor = true;
   alienYellowPort.events.onInputDown.add(function () {
-    return generateSprite(alienYellow, _yellowVocals2.default);
+    return generateSprite(alienYellow, yellow);
   }, this);
 
   alienGreenPort.inputEnabled = true;
   alienGreenPort.input.useHandCursor = true;
   alienGreenPort.events.onInputDown.add(function () {
-    return generateSprite(alienGreen, _greenVocals2.default);
+    return generateSprite(alienGreen, green);
   }, this);
 
   alienBluePort.inputEnabled = true;
   alienBluePort.input.useHandCursor = true;
   alienBluePort.events.onInputDown.add(function () {
-    return generateSprite(alienBlue, _blueVocals2.default);
+    return generateSprite(alienBlue, blue);
   }, this);
 
   alienBeigePort.inputEnabled = true;
   alienBeigePort.input.useHandCursor = true;
   alienBeigePort.events.onInputDown.add(function () {
-    return generateSprite(alienBeige, _beigeVocals2.default);
+    return generateSprite(alienBeige, beige);
   }, this);
 
   //alien dragging
@@ -386,7 +459,7 @@ function create() {
 
   alienYellow.inputEnabled = true;
   alienYellow.input.enableDrag(true);
-  //alienYellow.events.onInputUp.add(mouseCords, this);
+  alienYellow.events.onInputUp.add(mouseCords, this);
 
   alienGreen.inputEnabled = true;
   alienGreen.input.enableDrag(true);
@@ -399,9 +472,42 @@ function create() {
 
   Tone.Transport.start('+0.1');
   Tone.Transport.bpm.rampTo(currentTempo, 0);
+}
 
-  // timer = game.time.create();
-  // timer.start();
+function setCurrentAlien(voice, obj) {
+  obj.current.stop();
+  mouseCords();
+  collisionHandler(voice, obj, xCoord, yCoord);
+}
+
+function collisionHandler(voice, obj, xCoord, yCoord) {
+
+  if (circle0.getBounds().contains(xCoord, yCoord)) {
+    obj.current = voice.circle0;
+    obj.current.start("@1m");
+  } else if (circle1.getBounds().contains(xCoord, yCoord)) {
+    obj.current = voice.circle1;
+    obj.current.start("@1m");
+  } else if (circle2.getBounds().contains(xCoord, yCoord)) {
+    obj.current = voice.circle2;
+    obj.current.start("@1m");
+  } else if (circle3.getBounds().contains(xCoord, yCoord)) {
+    obj.current = voice.circle3;
+    obj.current.start("@1m");
+  }
+}
+
+function mouseCords() {
+  var _ref = [game.input.mousePointer.x, game.input.mousePointer.y];
+  xCoord = _ref[0];
+  yCoord = _ref[1];
+
+  console.log('X', xCoord);
+  console.log('Y', yCoord);
+}
+
+function over() {
+  console.log('yes');
 }
 
 function tempo(action) {
@@ -516,16 +622,19 @@ function stopMeteor() {
 //   console.log(game.input.mousePointer.x, game.input.mousePointer.y);
 // }
 
-function generateSprite(sprite, voice) {
+function generateSprite(sprite, obj) {
   sprite.visible = !sprite.visible;
   if (sprite.visible) {
-    voice.start("(@1m)");
+    obj.current.start("(@1m)");
   } else {
-    voice.stop();
+    obj.current.stop();
   }
 }
 
 function update() {
+
+  //game.physics.arcade.overlap(circle0, alienPink, () => collisionHandler(alienPink, currentPinkVoice), null, this);
+
   if (meteorPressed == true) {
     var x = game.input.mousePointer.x,
         y = game.input.mousePointer.y,
@@ -679,9 +788,22 @@ var snare = new Tone.NoiseSynth({
   }
 }).toMaster();
 
-var blueVoice = new Tone.Loop(function (time) {
+var voice0 = new Tone.Pattern(function (time) {
   snare.triggerAttack(time);
-}, "0:1:1");
+}, melody0);
+
+var melody0 = [['0:1:1'], ['0:1:2'], ['0:1:3']];
+
+var voice1 = new Tone.Pattern(function (time) {
+  snare.triggerAttack(time);
+}, ["0:1:4"]);
+
+var blueVoice = {
+  circle0: voice0,
+  circle1: voice1,
+  circle2: voice0,
+  circle3: voice0
+};
 
 exports.default = blueVoice;
 
@@ -695,15 +817,22 @@ exports.default = blueVoice;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var pluck = new Tone.PluckSynth().toMaster();
+var greenSynth = new Tone.PluckSynth().toMaster();
 
-var greenVoice = new Tone.Event(function (time, pitch) {
-  pluck.triggerAttackRelease(440, "32n", time);
-}, "G2");
+var melody0 = [['0:4:1', 'G5']];
 
-greenVoice.set({
-  "loop": true
-});
+var voice0 = new Tone.Part(function (time, note) {
+  greenSynth.triggerAttackRelease(note, '4n', time);
+}, melody0);
+
+voice0.loop = true;
+
+var greenVoice = {
+  circle0: voice0,
+  circle1: voice0,
+  circle2: voice0,
+  circle3: voice0
+};
 
 exports.default = greenVoice;
 
@@ -721,7 +850,7 @@ var stationSynth = new Tone.MembraneSynth().toMaster();
 
 var stationVoice = new Tone.Loop(function (time) {
   stationSynth.triggerAttackRelease("F5", "8t", time);
-}, "2:4");
+}, "2:1:4");
 
 exports.default = stationVoice;
 
@@ -737,13 +866,28 @@ Object.defineProperty(exports, "__esModule", {
 });
 var synth = new Tone.MembraneSynth().toMaster();
 
-var yellowVoice = new Tone.Event(function (time, pitch) {
+var voice0 = new Tone.Event(function (time, pitch) {
   synth.triggerAttackRelease(440, "32n", time);
-}, [["2:2", "F6"]]);
+}, [["1:2:2", "F6"]]);
 
-yellowVoice.set({
+voice0.set({
   "loop": true
 });
+
+var voice1 = new Tone.Part(function (time, note) {
+  synth.triggerAttackRelease(note, "32n", time);
+}, melody1);
+
+var melody1 = [['0:2:1', 'E4'], ['0:3:2', 'E6']];
+
+melody1.loop = true;
+
+var yellowVoice = {
+  circle0: voice0,
+  circle1: voice1,
+  circle2: voice0,
+  circle3: voice0
+};
 
 exports.default = yellowVoice;
 
@@ -766,27 +910,48 @@ var kick = new Tone.MembraneSynth({
   "octaves": 10
 }).toMaster();
 
-// var pinkVoice = new Tone.Loop(function(time){
-//   kick0.triggerAttackRelease("C2", "32n", time);
-// }, "(@1m) + 4n");
+var melody0 = [['0:1:4', 'C2'], ['0:2:4', 'C2']];
 
-// var pinkVoice = new Tone.Loop(function(time) {
-//   kick.triggerAttackRelease("C2", "4n", time);
-// }, "0:3:0");
+var voice0 = new Tone.Part(function (time, note) {
+  kick.triggerAttackRelease(note, "32n", time);
+}, melody0);
 
+voice0.loop = true;
+voice0.volume = 30;
 
-// var pinkVoice = new Tone.Pattern(function(time, note){
-//     kick.triggerAttackRelease(note, 0.75);
-// }, [["C2"], ["C2"], ["C2"], ["C2"]]);
+var melody1 = [['0:1:4', 'C2'], ['0:2:2', 'C2']];
 
+var voice1 = new Tone.Part(function (time, note) {
+  kick.triggerAttackRelease(note, "16n", time);
+}, melody1);
 
-var pinkVoice = new Tone.Loop(function (time) {
-  kick.triggerAttackRelease("C2", "32n", time);
-}, "0:1:0");
+voice1.loop = true;
+voice1.volume = 30;
 
-var pinkVoice1 = new Tone.Loop(function (time) {
-  kick.triggerAttackRelease("C2", "32n", time);
-}, "0:2:0");
+var melody2 = [['0:1:2', 'C2'], ['0:3:2', 'C2']];
+
+var voice2 = new Tone.Part(function (time, note) {
+  kick.triggerAttackRelease(note, "32n", time);
+}, melody2);
+
+voice2.loop = true;
+voice2.volume = 30;
+
+var melody3 = [['0:1:4', 'C2']];
+
+var voice3 = new Tone.Part(function (time, note) {
+  kick.triggerAttackRelease(note, "32", time);
+}, melody3);
+
+voice3.loop = true;
+voice3.volume = 30;
+
+var pinkVoice = {
+  circle0: voice0,
+  circle1: voice1,
+  circle2: voice2,
+  circle3: voice3
+};
 
 exports.default = pinkVoice;
 

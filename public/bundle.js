@@ -74,7 +74,7 @@
 /******/ 	  document.getElementsByTagName("head")[0].appendChild(el);
 /******/ 	}());
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -109,15 +109,109 @@ exports.default = beigeVoice;
 "use strict";
 
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var rock = new Tone.DuoSynth({
+  "vibratoAmount": 0,
+  "vibratoRate": 5,
+  "portamento": 0.1,
+  "harmonicity": 1.005,
+  "volume": -10,
+  "voice0": {
+    "volume": -12,
+    "oscillator": {
+      "type": "sawtooth"
+    },
+    "filter": {
+      "Q": 1,
+      "type": "lowshelf",
+      "rolloff": -24
+    },
+    "envelope": {
+      "attack": 0.01,
+      "decay": 0.25,
+      "sustain": 0.4,
+      "release": 1.2
+    },
+    "filterEnvelope": {
+      "attack": 0.001,
+      "decay": 0.05,
+      "sustain": 0.3,
+      "release": 2,
+      "baseFrequency": 100,
+      "octaves": 4
+    }
+  },
+  "voice1": {
+    "volume": -25,
+    "oscillator": {
+      "type": "square"
+    },
+    "filter": {
+      "Q": 2,
+      "type": "peaking",
+      "rolloff": -12
+    },
+    "envelope": {
+      "attack": 0.25,
+      "decay": 4,
+      "sustain": 0.1,
+      "release": 0.8
+    },
+    "filterEnvelope": {
+      "attack": 0.05,
+      "decay": 0.05,
+      "sustain": 0.7,
+      "release": 2,
+      "baseFrequency": 5000,
+      "octaves": -1.5
+    }
+  }
+}).toMaster();
+
+exports.default = rock;
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _meteorVocals = __webpack_require__(1);
+
+var _meteorVocals2 = _interopRequireDefault(_meteorVocals);
+
+var _stationVocals = __webpack_require__(5);
+
+var _stationVocals2 = _interopRequireDefault(_stationVocals);
+
+var _pinkVocals = __webpack_require__(7);
+
+var _pinkVocals2 = _interopRequireDefault(_pinkVocals);
+
+var _yellowVocals = __webpack_require__(6);
+
+var _yellowVocals2 = _interopRequireDefault(_yellowVocals);
+
+var _greenVocals = __webpack_require__(4);
+
+var _greenVocals2 = _interopRequireDefault(_greenVocals);
+
 var _beigeVocals = __webpack_require__(0);
 
 var _beigeVocals2 = _interopRequireDefault(_beigeVocals);
+
+var _blueVocals = __webpack_require__(3);
+
+var _blueVocals2 = _interopRequireDefault(_blueVocals);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var width = 1400,
     height = 600,
-    currentTempo = 70,
+    currentTempo = 120,
     meteorPressed = false,
     synthNotes = ["C2", "E2", "G2", "A2", "C3", "D3", "E3", "G3", "A3", "B3", "C4", "D4", "E4", "G4", "A4", "B4", "C5"],
     lastSynthNote = synthNotes[0],
@@ -138,180 +232,6 @@ var width = 1400,
     timer = void 0;
 
 var game = new Phaser.Game(width, height, Phaser.AUTO, 'station', { preload: preload, create: create, update: update });
-
-var stationSynth = new Tone.MembraneSynth().toMaster();
-// var pluck = new Tone.PluckSynth().toMaster();
-// var chord = new Tone.PolySynth(6, Tone.Synth).toMaster();
-// //set the attributes using the set interface
-// chord.set("detune", -1200);
-// //play a chord
-
-// var rock = new Tone.DuoSynth({
-//     "vibratoAmount" : 0,
-//     "vibratoRate" : 5,
-//     "portamento" : 0.1,
-//     "harmonicity" : 1.005,
-//     "volume" : -10,
-//     "voice0" : {
-//       "volume" : -12,
-//       "oscillator" : {
-//         "type" : "sawtooth"
-//       },
-//       "filter" : {
-//         "Q" : 1,
-//         "type" : "lowshelf",
-//         "rolloff" : -24
-//       },
-//       "envelope" : {
-//         "attack" : 0.01,
-//         "decay" : 0.25,
-//         "sustain" : 0.4,
-//         "release" : 1.2
-//       },
-//       "filterEnvelope" : {
-//         "attack" : 0.001,
-//         "decay" : 0.05,
-//         "sustain" : 0.3,
-//         "release" : 2,
-//         "baseFrequency" : 100,
-//         "octaves" : 4
-//       }
-//     },
-//     "voice1" : {
-//       "volume" : -25,
-//       "oscillator" : {
-//         "type" : "square"
-//       },
-//       "filter" : {
-//         "Q" : 2,
-//         "type" : "peaking",
-//         "rolloff" : -12
-//       },
-//       "envelope" : {
-//         "attack" : 0.25,
-//         "decay" : 4,
-//         "sustain" : 0.1,
-//         "release" : 0.8
-//       },
-//       "filterEnvelope" : {
-//         "attack" : 0.05,
-//         "decay" : 0.05,
-//         "sustain" : 0.7,
-//         "release" : 2,
-//         "baseFrequency" : 5000,
-//         "octaves" : -1.5
-//       }
-//     }
-//   }).toMaster();
-
-// // var reverb = new Tone.Freeverb().toMaster();
-// // rock.connect(reverb);
-// //station beat
-var stationVoice = new Tone.Loop(function (time) {
-  stationSynth.triggerAttackRelease("F5", "8t", time);
-}, "2:4");
-
-// //pink alien
-
-// var kick = new Tone.MembraneSynth({
-//   "envelope" : {
-//     "sustain" : 0,
-//     "attack" : 0.02,
-//     "decay" : 0.8
-//   },
-//   "octaves" : 10
-// }).toMaster();
-
-// // var pinkVoice = new Tone.Loop(function(time){
-// //   kick0.triggerAttackRelease("C2", "32n", time);
-// // }, "(@1m) + 4n");
-
-// // var pinkVoice = new Tone.Loop(function(time) {
-// //   kick.triggerAttackRelease("C2", "4n", time);
-// // }, "0:3:0");
-
-
-// // var pinkVoice = new Tone.Pattern(function(time, note){
-// //     kick.triggerAttackRelease(note, 0.75);
-// // }, [["C2"], ["C2"], ["C2"], ["C2"]]);
-
-
-// var pinkVoice = new Tone.Loop(function(time) {
-//   kick.triggerAttackRelease("C2", "32n", time);
-// }, "0:1:0");
-
-// var pinkVoice1 = new Tone.Loop(function(time) {
-//   kick.triggerAttackRelease("C2", "32n", time);
-// }, "0:2:0");
-
-// //yellow alien voice
-// var yellowVoice = new Tone.Event(function(time, pitch) {
-//   synth.triggerAttackRelease(440, "32n", time);
-// }, [["2:2", "F6"]]);
-
-// yellowVoice.set({
-//     "loop" : true,
-// });
-
-// //green alien voice
-// var greenVoice = new Tone.Event(function(time, pitch) {
-//   pluck.triggerAttackRelease(440, "32n", time);
-// }, "G2");
-
-// greenVoice.set({
-//     "loop" : true,
-// });
-
-//
-//
-// BLUE ALIEN VOCALS
-//
-//
-
-var snare = new Tone.NoiseSynth({
-  "volume": -5,
-  "envelope": {
-    "attack": 0.001,
-    "decay": 0.2,
-    "sustain": 0
-  },
-  "filterEnvelope": {
-    "attack": 0.001,
-    "decay": 0.1,
-    "sustain": 0
-  }
-}).toMaster();
-
-var blueVoice = new Tone.Loop(function (time) {
-  snare.triggerAttack(time);
-}, "0:1:1");
-
-//
-//
-// BEIGE ALIEN VOCALS
-//
-//
-
-// var C_chord = ['C4', 'E4', 'G4', 'B4'];
-// var D_chord = ['D4', 'F4', 'A4', 'C5'];
-// var G_chord = ['B3', 'D4', 'E4', 'A4'];
-
-// var chordMelody = [
-//   ['0:0:2', C_chord],
-//   ['0:1:0', C_chord],
-//   ['0:1:3', D_chord],
-//   ['0:2:2', C_chord],
-//   ['0:3:0', C_chord],
-//   ['0:3:2', G_chord]
-// ];
-
-// var beigeSynth = new Tone.PolySynth().toMaster();
-// var beigeVoice = new Tone.Part(function(time, note) {
-//   beigeSynth.triggerAttackRelease(note, '16n', time);
-// }, chordMelody);
-
-// beigeVoice.loop = true;
-
 
 function preload() {
   game.load.image('alienGreen', 'images/aliens/alienGreen_float.png');
@@ -339,18 +259,22 @@ function create() {
   circle0 = game.add.graphics(0, 0);
   circle0.lineStyle(2, 0x333333, 1);
   circle0.drawCircle(game.world.centerX, game.world.centerY, 175);
+  game.physics.enable(circle0, Phaser.Physics.ARCADE);
 
   circle1 = game.add.graphics(0, 0);
   circle1.lineStyle(2, 0x333333, 1);
   circle1.drawCircle(game.world.centerX, game.world.centerY, 450);
+  game.physics.enable(circle1, Phaser.Physics.ARCADE);
 
   circle2 = game.add.graphics(0, 0);
   circle2.lineStyle(2, 0x333333, 1);
   circle2.drawCircle(game.world.centerX, game.world.centerY, 800);
+  game.physics.enable(circle2, Phaser.Physics.ARCADE);
 
   circle3 = game.add.graphics(0, 0);
   circle3.lineStyle(2, 0x333333, 1);
   circle3.drawCircle(game.world.centerX, game.world.centerY, 1250);
+  game.physics.enable(circle3, Phaser.Physics.ARCADE);
 
   station = game.add.sprite(game.world.centerX, game.world.centerY, 'station');
   station.anchor.setTo(0.5, 0.5);
@@ -427,25 +351,25 @@ function create() {
   alienPinkPort.inputEnabled = true;
   alienPinkPort.input.useHandCursor = true;
   alienPinkPort.events.onInputDown.add(function () {
-    return generateSprite(alienPink, pinkVoice);
+    return generateSprite(alienPink, _pinkVocals2.default);
   }, this);
 
   alienYellowPort.inputEnabled = true;
   alienYellowPort.input.useHandCursor = true;
   alienYellowPort.events.onInputDown.add(function () {
-    return generateSprite(alienYellow, yellowVoice);
+    return generateSprite(alienYellow, _yellowVocals2.default);
   }, this);
 
   alienGreenPort.inputEnabled = true;
   alienGreenPort.input.useHandCursor = true;
   alienGreenPort.events.onInputDown.add(function () {
-    return generateSprite(alienGreen, greenVoice);
+    return generateSprite(alienGreen, _greenVocals2.default);
   }, this);
 
   alienBluePort.inputEnabled = true;
   alienBluePort.input.useHandCursor = true;
   alienBluePort.events.onInputDown.add(function () {
-    return generateSprite(alienBlue, blueVoice);
+    return generateSprite(alienBlue, _blueVocals2.default);
   }, this);
 
   alienBeigePort.inputEnabled = true;
@@ -499,10 +423,10 @@ function tempo(action) {
 
 function signal() {
   if (!signalActive) {
-    stationVoice.start();
+    _stationVocals2.default.start();
     redrawCircles(0x888888);
   } else if (signalActive) {
-    stationVoice.stop();
+    _stationVocals2.default.stop();
     redrawCircles(0x333333);
   }
   signalActive = !signalActive;
@@ -585,7 +509,7 @@ function startMeteor() {
 
 function stopMeteor() {
   meteorPressed = false;
-  rock.triggerRelease();
+  _meteorVocals2.default.triggerRelease();
 }
 
 // function mouseCords() {
@@ -611,125 +535,260 @@ function update() {
         val = 0;
 
     if (x < band) {
-      rock.setNote(synthNotes[0]);
+      _meteorVocals2.default.setNote(synthNotes[0]);
       lastSynthNote = synthNotes[0];
       //rock.triggerAttack(lastSynthNote);
     }
     if (x > band && x < 2 * band) {
-      rock.setNote(synthNotes[1]);
+      _meteorVocals2.default.setNote(synthNotes[1]);
       lastSynthNote = synthNotes[1];
       //rock.triggerAttack(lastSynthNote);
     }
     if (x > 2 * band && x < 3 * band) {
-      rock.setNote(synthNotes[2]);
+      _meteorVocals2.default.setNote(synthNotes[2]);
       lastSynthNote = synthNotes[2];
     }
 
     if (x > 3 * band && x < 4 * band) {
-      rock.setNote(synthNotes[3]);
+      _meteorVocals2.default.setNote(synthNotes[3]);
       lastSynthNote = synthNotes[3];
     }
 
     if (x > 4 * band && x < 5 * band) {
-      rock.setNote(synthNotes[4]);
+      _meteorVocals2.default.setNote(synthNotes[4]);
       lastSynthNote = synthNotes[4];
     }
 
     if (x > 5 * band && x < 6 * band) {
-      rock.setNote(synthNotes[5]);
+      _meteorVocals2.default.setNote(synthNotes[5]);
       lastSynthNote = synthNotes[5];
     }
 
     if (x > 6 * band && x < 7 * band) {
-      rock.setNote(synthNotes[6]);
+      _meteorVocals2.default.setNote(synthNotes[6]);
       lastSynthNote = synthNotes[6];
     }
 
     if (x > 7 * band && x < 8 * band) {
-      rock.setNote(synthNotes[7]);
+      _meteorVocals2.default.setNote(synthNotes[7]);
       lastSynthNote = synthNotes[7];
     }
 
     if (x > 8 * band && x < 9 * band) {
-      rock.setNote(synthNotes[8]);
+      _meteorVocals2.default.setNote(synthNotes[8]);
       lastSynthNote = synthNotes[8];
     }
 
     if (x > 9 * band && x < 10 * band) {
-      rock.setNote(synthNotes[9]);
+      _meteorVocals2.default.setNote(synthNotes[9]);
       lastSynthNote = synthNotes[9];
     }
 
     if (x > 10 * band && x < 11 * band) {
-      rock.setNote(synthNotes[10]);
+      _meteorVocals2.default.setNote(synthNotes[10]);
       lastSynthNote = synthNotes[10];
     }
 
     if (x > 11 * band && x < 12 * band) {
-      rock.setNote(synthNotes[11]);
+      _meteorVocals2.default.setNote(synthNotes[11]);
       lastSynthNote = synthNotes[11];
     }
 
     if (x > 12 * band && x < 13 * band) {
-      rock.setNote(synthNotes[12]);
+      _meteorVocals2.default.setNote(synthNotes[12]);
       lastSynthNote = synthNotes[12];
     }
 
     if (x > 13 * band && x < 14 * band) {
-      rock.setNote(synthNotes[13]);
+      _meteorVocals2.default.setNote(synthNotes[13]);
       lastSynthNote = synthNotes[13];
     }
 
     if (x > 14 * band && x < 15 * band) {
-      rock.setNote(synthNotes[14]);
+      _meteorVocals2.default.setNote(synthNotes[14]);
       lastSynthNote = synthNotes[14];
     }
 
     if (x > 15 * band && x < 16 * band) {
-      rock.setNote(synthNotes[15]);
+      _meteorVocals2.default.setNote(synthNotes[15]);
       lastSynthNote = synthNotes[15];
     }
 
     if (x > 16 * band) {
-      rock.setNote(synthNotes[16]);
+      _meteorVocals2.default.setNote(synthNotes[16]);
       lastSynthNote = synthNotes[16];
     }
 
     if (y < stripe) {
-      rock.vibratoAmount.value = val;
+      _meteorVocals2.default.vibratoAmount.value = val;
     }
 
     if (y > stripe && y < 2 * stripe) {
-      rock.vibratoAmount.value = val + 1;
+      _meteorVocals2.default.vibratoAmount.value = val + 1;
     }
 
     if (y > 2 * stripe && y < 3 * stripe) {
-      rock.vibratoAmount.value = val + 2;
+      _meteorVocals2.default.vibratoAmount.value = val + 2;
     }
 
     if (y > 3 * stripe && y < 4 * stripe) {
-      rock.vibratoAmount.value = val + 3;
+      _meteorVocals2.default.vibratoAmount.value = val + 3;
     }
 
     if (y > 4 * stripe && y < 5 * stripe) {
-      rock.vibratoAmount.value = val + 4;
+      _meteorVocals2.default.vibratoAmount.value = val + 4;
     }
 
     if (y > 5 * stripe && y < 6 * stripe) {
-      rock.vibratoAmount.value = val + 5;
+      _meteorVocals2.default.vibratoAmount.value = val + 5;
     }
 
     if (y > 6 * stripe && y < 7 * stripe) {
-      rock.vibratoAmount.value = val + 6;
+      _meteorVocals2.default.vibratoAmount.value = val + 6;
     }
 
     if (y > 7 * stripe) {
-      rock.vibratoAmount.value = val + 7;
+      _meteorVocals2.default.vibratoAmount.value = val + 7;
     }
 
-    rock.triggerAttack(lastSynthNote);
+    _meteorVocals2.default.triggerAttack(lastSynthNote);
   }
 }
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var snare = new Tone.NoiseSynth({
+  "volume": -5,
+  "envelope": {
+    "attack": 0.001,
+    "decay": 0.2,
+    "sustain": 0
+  },
+  "filterEnvelope": {
+    "attack": 0.001,
+    "decay": 0.1,
+    "sustain": 0
+  }
+}).toMaster();
+
+var blueVoice = new Tone.Loop(function (time) {
+  snare.triggerAttack(time);
+}, "0:1:1");
+
+exports.default = blueVoice;
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var pluck = new Tone.PluckSynth().toMaster();
+
+var greenVoice = new Tone.Event(function (time, pitch) {
+  pluck.triggerAttackRelease(440, "32n", time);
+}, "G2");
+
+greenVoice.set({
+  "loop": true
+});
+
+exports.default = greenVoice;
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var stationSynth = new Tone.MembraneSynth().toMaster();
+
+var stationVoice = new Tone.Loop(function (time) {
+  stationSynth.triggerAttackRelease("F5", "8t", time);
+}, "2:4");
+
+exports.default = stationVoice;
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var synth = new Tone.MembraneSynth().toMaster();
+
+var yellowVoice = new Tone.Event(function (time, pitch) {
+  synth.triggerAttackRelease(440, "32n", time);
+}, [["2:2", "F6"]]);
+
+yellowVoice.set({
+  "loop": true
+});
+
+exports.default = yellowVoice;
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var kick = new Tone.MembraneSynth({
+  "envelope": {
+    "sustain": 0,
+    "attack": 0.02,
+    "decay": 0.8
+  },
+  "octaves": 10
+}).toMaster();
+
+// var pinkVoice = new Tone.Loop(function(time){
+//   kick0.triggerAttackRelease("C2", "32n", time);
+// }, "(@1m) + 4n");
+
+// var pinkVoice = new Tone.Loop(function(time) {
+//   kick.triggerAttackRelease("C2", "4n", time);
+// }, "0:3:0");
+
+
+// var pinkVoice = new Tone.Pattern(function(time, note){
+//     kick.triggerAttackRelease(note, 0.75);
+// }, [["C2"], ["C2"], ["C2"], ["C2"]]);
+
+
+var pinkVoice = new Tone.Loop(function (time) {
+  kick.triggerAttackRelease("C2", "32n", time);
+}, "0:1:0");
+
+var pinkVoice1 = new Tone.Loop(function (time) {
+  kick.triggerAttackRelease("C2", "32n", time);
+}, "0:2:0");
+
+exports.default = pinkVoice;
 
 /***/ })
 /******/ ]);

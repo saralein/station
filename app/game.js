@@ -1,6 +1,8 @@
+import beigeVoice from './vocals/beigeVocals';
+
 let width = 1400,
     height = 600,
-    currentTempo = 120,
+    currentTempo = 70,
     meteorPressed = false,
     synthNotes = ["C2", "E2", "G2", "A2",
                   "C3", "D3", "E3", "G3",
@@ -26,160 +28,179 @@ let width = 1400,
 
 var game = new Phaser.Game(width, height, Phaser.AUTO, 'station', { preload: preload, create: create, update: update });
 
-var synth = new Tone.MembraneSynth().toMaster();
-var pluck = new Tone.PluckSynth().toMaster();
-var chord = new Tone.PolySynth(6, Tone.Synth).toMaster();
-//set the attributes using the set interface
-chord.set("detune", -1200);
-//play a chord
+var stationSynth = new Tone.MembraneSynth().toMaster();
+// var pluck = new Tone.PluckSynth().toMaster();
+// var chord = new Tone.PolySynth(6, Tone.Synth).toMaster();
+// //set the attributes using the set interface
+// chord.set("detune", -1200);
+// //play a chord
 
-var rock = new Tone.DuoSynth({
-    "vibratoAmount" : 0,
-    "vibratoRate" : 5,
-    "portamento" : 0.1,
-    "harmonicity" : 1.005,
-    "volume" : -10,
-    "voice0" : {
-      "volume" : -12,
-      "oscillator" : {
-        "type" : "sawtooth"
-      },
-      "filter" : {
-        "Q" : 1,
-        "type" : "lowshelf",
-        "rolloff" : -24
-      },
-      "envelope" : {
-        "attack" : 0.01,
-        "decay" : 0.25,
-        "sustain" : 0.4,
-        "release" : 1.2
-      },
-      "filterEnvelope" : {
-        "attack" : 0.001,
-        "decay" : 0.05,
-        "sustain" : 0.3,
-        "release" : 2,
-        "baseFrequency" : 100,
-        "octaves" : 4
-      }
-    },
-    "voice1" : {
-      "volume" : -25,
-      "oscillator" : {
-        "type" : "square"
-      },
-      "filter" : {
-        "Q" : 2,
-        "type" : "peaking",
-        "rolloff" : -12
-      },
-      "envelope" : {
-        "attack" : 0.25,
-        "decay" : 4,
-        "sustain" : 0.1,
-        "release" : 0.8
-      },
-      "filterEnvelope" : {
-        "attack" : 0.05,
-        "decay" : 0.05,
-        "sustain" : 0.7,
-        "release" : 2,
-        "baseFrequency" : 5000,
-        "octaves" : -1.5
-      }
-    }
-  }).toMaster();
+// var rock = new Tone.DuoSynth({
+//     "vibratoAmount" : 0,
+//     "vibratoRate" : 5,
+//     "portamento" : 0.1,
+//     "harmonicity" : 1.005,
+//     "volume" : -10,
+//     "voice0" : {
+//       "volume" : -12,
+//       "oscillator" : {
+//         "type" : "sawtooth"
+//       },
+//       "filter" : {
+//         "Q" : 1,
+//         "type" : "lowshelf",
+//         "rolloff" : -24
+//       },
+//       "envelope" : {
+//         "attack" : 0.01,
+//         "decay" : 0.25,
+//         "sustain" : 0.4,
+//         "release" : 1.2
+//       },
+//       "filterEnvelope" : {
+//         "attack" : 0.001,
+//         "decay" : 0.05,
+//         "sustain" : 0.3,
+//         "release" : 2,
+//         "baseFrequency" : 100,
+//         "octaves" : 4
+//       }
+//     },
+//     "voice1" : {
+//       "volume" : -25,
+//       "oscillator" : {
+//         "type" : "square"
+//       },
+//       "filter" : {
+//         "Q" : 2,
+//         "type" : "peaking",
+//         "rolloff" : -12
+//       },
+//       "envelope" : {
+//         "attack" : 0.25,
+//         "decay" : 4,
+//         "sustain" : 0.1,
+//         "release" : 0.8
+//       },
+//       "filterEnvelope" : {
+//         "attack" : 0.05,
+//         "decay" : 0.05,
+//         "sustain" : 0.7,
+//         "release" : 2,
+//         "baseFrequency" : 5000,
+//         "octaves" : -1.5
+//       }
+//     }
+//   }).toMaster();
 
-// var reverb = new Tone.Freeverb().toMaster();
-// rock.connect(reverb);
-//station beat
+// // var reverb = new Tone.Freeverb().toMaster();
+// // rock.connect(reverb);
+// //station beat
 var stationVoice = new Tone.Loop(function(time){
-  synth.triggerAttackRelease("F5", "8t", time)
+  stationSynth.triggerAttackRelease("F5", "8t", time)
 }, "2:4");
 
-//pink alien
+// //pink alien
 
-var kick = new Tone.MembraneSynth({
-  "envelope" : {
-    "sustain" : 0,
-    "attack" : 0.02,
-    "decay" : 0.8
-  },
-  "octaves" : 10
-}).toMaster();
+// var kick = new Tone.MembraneSynth({
+//   "envelope" : {
+//     "sustain" : 0,
+//     "attack" : 0.02,
+//     "decay" : 0.8
+//   },
+//   "octaves" : 10
+// }).toMaster();
 
-// var pinkVoice = new Tone.Loop(function(time){
-//   kick0.triggerAttackRelease("C2", "32n", time);
-// }, "(@1m) + 4n");
+// // var pinkVoice = new Tone.Loop(function(time){
+// //   kick0.triggerAttackRelease("C2", "32n", time);
+// // }, "(@1m) + 4n");
+
+// // var pinkVoice = new Tone.Loop(function(time) {
+// //   kick.triggerAttackRelease("C2", "4n", time);
+// // }, "0:3:0");
+
+
+// // var pinkVoice = new Tone.Pattern(function(time, note){
+// //     kick.triggerAttackRelease(note, 0.75);
+// // }, [["C2"], ["C2"], ["C2"], ["C2"]]);
+
 
 // var pinkVoice = new Tone.Loop(function(time) {
-//   kick.triggerAttackRelease("C2", "4n", time);
-// }, "0:3:0");
+//   kick.triggerAttackRelease("C2", "32n", time);
+// }, "0:1:0");
 
+// var pinkVoice1 = new Tone.Loop(function(time) {
+//   kick.triggerAttackRelease("C2", "32n", time);
+// }, "0:2:0");
 
-// var pinkVoice = new Tone.Pattern(function(time, note){
-//     kick.triggerAttackRelease(note, 0.75);
-// }, [["C2"], ["C2"], ["C2"], ["C2"]]);
+// //yellow alien voice
+// var yellowVoice = new Tone.Event(function(time, pitch) {
+//   synth.triggerAttackRelease(440, "32n", time);
+// }, [["2:2", "F6"]]);
 
+// yellowVoice.set({
+//     "loop" : true,
+// });
 
-var pinkVoice = new Tone.Loop(function(time) {
-  kick.triggerAttackRelease("C2", "32n", time);
-}, "0:1:0");
+// //green alien voice
+// var greenVoice = new Tone.Event(function(time, pitch) {
+//   pluck.triggerAttackRelease(440, "32n", time);
+// }, "G2");
 
-var pinkVoice1 = new Tone.Loop(function(time) {
-  kick.triggerAttackRelease("C2", "32n", time);
-}, "0:2:0");
+// greenVoice.set({
+//     "loop" : true,
+// });
 
-//yellow alien voice
-var yellowVoice = new Tone.Event(function(time, pitch) {
-  synth.triggerAttackRelease(440, "32n", time);
-}, [["2:2", "F6"]]);
+//
+//
+// BLUE ALIEN VOCALS
+//
+//
 
-yellowVoice.set({
-    "loop" : true,
-});
-
-//green alien voice
-var greenVoice = new Tone.Event(function(time, pitch) {
-  pluck.triggerAttackRelease(440, "32n", time);
-}, "G2");
-
-greenVoice.set({
-    "loop" : true,
-});
-
-    var snare = new Tone.NoiseSynth({
-      "volume" : -5,
-      "envelope" : {
-        "attack" : 0.001,
-        "decay" : 0.2,
-        "sustain" : 0
-      },
-      "filterEnvelope" : {
-        "attack" : 0.001,
-        "decay" : 0.1,
-        "sustain" : 0
-      }
-    }).toMaster();
+var snare = new Tone.NoiseSynth({
+  "volume" : -5,
+  "envelope" : {
+    "attack" : 0.001,
+    "decay" : 0.2,
+    "sustain" : 0
+  },
+  "filterEnvelope" : {
+    "attack" : 0.001,
+    "decay" : 0.1,
+    "sustain" : 0
+  }
+}).toMaster();
 
 var blueVoice = new Tone.Loop(function(time){
       snare.triggerAttack(time);
     }, "0:1:1");
 
-// var blueVoice = new Tone.Loop(function(){
-//   chord.triggerAttackRelease(["C4", "E4", "A4"], "32n + 4t");
-// });
+//
+//
+// BEIGE ALIEN VOCALS
+//
+//
 
-// var beigeVoice = new Tone.Pattern(function(time, note){
-//     synth.triggerAttackRelease(note, time);
-// }, [["C4", "4n"], ["E4", "8n"], ["G4", "4n"], ["A4", "4n"]]);
+// var C_chord = ['C4', 'E4', 'G4', 'B4'];
+// var D_chord = ['D4', 'F4', 'A4', 'C5'];
+// var G_chord = ['B3', 'D4', 'E4', 'A4'];
 
-//var beigeVoice = new MusicalScale({ key: 'G', mode: 'locrian' });
+// var chordMelody = [
+//   ['0:0:2', C_chord],
+//   ['0:1:0', C_chord],
+//   ['0:1:3', D_chord],
+//   ['0:2:2', C_chord],
+//   ['0:3:0', C_chord],
+//   ['0:3:2', G_chord]
+// ];
 
-var beigeVoice = new Tone.Pattern(function(time, note){
-    synth.triggerAttackRelease(note, 0.25);
-}, ["C4", "E4", "G4", "A4"]);
+// var beigeSynth = new Tone.PolySynth().toMaster();
+// var beigeVoice = new Tone.Part(function(time, note) {
+//   beigeSynth.triggerAttackRelease(note, '16n', time);
+// }, chordMelody);
+
+// beigeVoice.loop = true;
+
 
 function preload() {
   game.load.image('alienGreen', 'images/aliens/alienGreen_float.png');

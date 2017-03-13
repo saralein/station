@@ -1,4 +1,6 @@
-var synth = new Tone.MembraneSynth().toMaster();
+var synth = new Tone.MembraneSynth({
+  "volume": -10
+}).toMaster();
 
 var voice0 = new Tone.Event(function(time, pitch) {
   synth.triggerAttackRelease(440, "32n", time);
@@ -13,7 +15,7 @@ let voice1 = new Tone.Part(function(time, pitch) {
 }, melody1)
 
 let melody1 = [
-  ['0:2:1', 'E4'],
+  ['0:2:1', 'D5'],
 ]
 
 melody1.loop = true;

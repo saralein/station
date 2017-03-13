@@ -9,7 +9,10 @@ let melody0 = [
   ['0:2:2', C_chord]
 ];
 
-let beigeSynth = new Tone.PolySynth().toMaster();
+let beigeSynth = new Tone.PolySynth(
+    {
+      "volume" : -20
+    }).toMaster();
 let voice0 = new Tone.Part(function(time, note) {
   beigeSynth.triggerAttackRelease(note, '16n', time);
 }, melody0);

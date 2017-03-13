@@ -74,7 +74,7 @@
 /******/ 	  document.getElementsByTagName("head")[0].appendChild(el);
 /******/ 	}());
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 2);
+/******/ 	return __webpack_require__(__webpack_require__.s = 7);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -93,7 +93,9 @@ var G_chord = ['B3', 'D4', 'E4', 'A4'];
 
 var melody0 = [['0:1:1', C_chord], ['0:1:2', D_chord], ['0:1:4', G_chord], ['0:2:2', C_chord]];
 
-var beigeSynth = new Tone.PolySynth().toMaster();
+var beigeSynth = new Tone.PolySynth({
+  "volume": -20
+}).toMaster();
 var voice0 = new Tone.Part(function (time, note) {
   beigeSynth.triggerAttackRelease(note, '16n', time);
 }, melody0);
@@ -135,6 +137,152 @@ exports.default = beigeVoice;
 
 /***/ }),
 /* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var snare3 = new Tone.NoiseSynth({
+  "volume": -25,
+  "envelope": {
+    "attack": 0.5,
+    "decay": 0.1,
+    "sustain": 0
+  },
+  "filterEnvelope": {
+    "attack": 0.5,
+    "decay": 0.1,
+    "sustain": 0
+  }
+}).toMaster();
+
+var voice3 = new Tone.Pattern(function (time) {
+  snare3.triggerAttack(time);
+});
+
+var snare2 = new Tone.NoiseSynth({
+  "volume": -20,
+  "envelope": {
+    "attack": 0.001,
+    "decay": 0.5,
+    "sustain": 0
+  },
+  "filterEnvelope": {
+    "attack": 0.001,
+    "decay": 0.5,
+    "sustain": 0
+  }
+}).toMaster();
+
+var voice2 = new Tone.Pattern(function (time) {
+  snare2.triggerAttack(time);
+});
+
+var snare1 = new Tone.NoiseSynth({
+  "volume": -10,
+  "envelope": {
+    "attack": 0.001,
+    "decay": 0.2,
+    "sustain": 0
+  },
+  "filterEnvelope": {
+    "attack": 0.001,
+    "decay": 0.2,
+    "sustain": 0
+  }
+}).toMaster();
+
+var voice1 = new Tone.Pattern(function (time) {
+  snare1.triggerAttack(time);
+});
+
+var snare0 = new Tone.NoiseSynth({
+  "volume": -5,
+  "envelope": {
+    "attack": 0.001,
+    "decay": 0.1,
+    "sustain": 0
+  },
+  "filterEnvelope": {
+    "attack": 0.001,
+    "decay": 0.1,
+    "sustain": 0
+  }
+}).toMaster();
+
+var voice0 = new Tone.Pattern(function (time) {
+  snare0.triggerAttack(time);
+});
+
+var blueVoice = {
+  circle0: voice0,
+  circle1: voice1,
+  circle2: voice2,
+  circle3: voice3
+};
+
+exports.default = blueVoice;
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var greenSynth = new Tone.PluckSynth().toMaster();
+
+var melody0 = [['0:1:4', 'C7'], ['0:2:2', 'G8'], ['0:3:2', 'C4']];
+
+var voice0 = new Tone.Part(function (time, note) {
+  greenSynth.triggerAttackRelease(note, '4n', time);
+}, melody0);
+
+voice0.loop = true;
+
+var melody1 = [['0:1:2', 'C4'], ['0:2:2', 'C6'], ['0:3:1', 'C8']];
+
+var voice1 = new Tone.Part(function (time, note) {
+  greenSynth.triggerAttackRelease(note, '4n', time);
+}, melody1);
+
+voice1.loop = true;
+
+var melody2 = [['0:1:2', 'C2'], ['0:3:1', 'C4'], ['0:3:2', 'C8']];
+
+var voice2 = new Tone.Part(function (time, note) {
+  greenSynth.triggerAttackRelease(note, '4n', time);
+}, melody2);
+
+voice2.loop = true;
+
+var melody3 = [['0:1:2', 'D4'],
+//['0:3:1', 'C4'],
+['0:3:2', 'G2']];
+
+var voice3 = new Tone.Part(function (time, note) {
+  greenSynth.triggerAttackRelease(note, '4n', time);
+}, melody3);
+
+voice3.loop = true;
+
+var greenVoice = {
+  circle0: voice0,
+  circle1: voice1,
+  circle2: voice2,
+  circle3: voice3
+};
+
+exports.default = greenVoice;
+
+/***/ }),
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -204,13 +352,134 @@ var rock = new Tone.DuoSynth({
 exports.default = rock;
 
 /***/ }),
-/* 2 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _meteorVocals = __webpack_require__(1);
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var kick = new Tone.MembraneSynth({
+  "envelope": {
+    "sustain": 0,
+    "attack": 0.02,
+    "decay": 0.8
+  },
+  "octaves": 10
+}).toMaster();
+
+var melody0 = [['0:1:4', 'C2'], ['0:2:4', 'C2']];
+
+var voice0 = new Tone.Part(function (time, note) {
+  kick.triggerAttackRelease(note, "32n", time);
+}, melody0);
+
+voice0.loop = true;
+voice0.volume = 30;
+
+var melody1 = [['0:1:4', 'C2'], ['0:2:2', 'C2']];
+
+var voice1 = new Tone.Part(function (time, note) {
+  kick.triggerAttackRelease(note, "16n", time);
+}, melody1);
+
+voice1.loop = true;
+voice1.volume = 30;
+
+var melody2 = [['0:1:2', 'C2'], ['0:3:2', 'C2']];
+
+var voice2 = new Tone.Part(function (time, note) {
+  kick.triggerAttackRelease(note, "32n", time);
+}, melody2);
+
+voice2.loop = true;
+voice2.volume = 30;
+
+var melody3 = [['0:1:4', 'C2']];
+
+var voice3 = new Tone.Part(function (time, note) {
+  kick.triggerAttackRelease(note, "32", time);
+}, melody3);
+
+voice3.loop = true;
+voice3.volume = 30;
+
+var pinkVoice = {
+  circle0: voice0,
+  circle1: voice1,
+  circle2: voice2,
+  circle3: voice3
+};
+
+exports.default = pinkVoice;
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var stationSynth = new Tone.MembraneSynth().toMaster();
+
+var stationVoice = new Tone.Loop(function (time) {
+  stationSynth.triggerAttackRelease("F5", "8t", time);
+}, "2:1:4");
+
+exports.default = stationVoice;
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var synth = new Tone.MembraneSynth({
+  "volume": -10
+}).toMaster();
+
+var voice0 = new Tone.Event(function (time, pitch) {
+  synth.triggerAttackRelease(440, "32n", time);
+}, [["1:2:2", "F6"]]);
+
+voice0.set({
+  "loop": true
+});
+
+var voice1 = new Tone.Part(function (time, pitch) {
+  synth.triggerAttackRelease(note, "4n", time);
+}, melody1);
+
+var melody1 = [['0:2:1', 'D5']];
+
+melody1.loop = true;
+
+var yellowVoice = {
+  circle0: voice0,
+  circle1: voice1,
+  circle2: voice0,
+  circle3: voice0
+};
+
+exports.default = yellowVoice;
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _meteorVocals = __webpack_require__(3);
 
 var _meteorVocals2 = _interopRequireDefault(_meteorVocals);
 
@@ -218,7 +487,7 @@ var _stationVocals = __webpack_require__(5);
 
 var _stationVocals2 = _interopRequireDefault(_stationVocals);
 
-var _pinkVocals = __webpack_require__(7);
+var _pinkVocals = __webpack_require__(4);
 
 var _pinkVocals2 = _interopRequireDefault(_pinkVocals);
 
@@ -226,7 +495,7 @@ var _yellowVocals = __webpack_require__(6);
 
 var _yellowVocals2 = _interopRequireDefault(_yellowVocals);
 
-var _greenVocals = __webpack_require__(4);
+var _greenVocals = __webpack_require__(2);
 
 var _greenVocals2 = _interopRequireDefault(_greenVocals);
 
@@ -234,7 +503,7 @@ var _beigeVocals = __webpack_require__(0);
 
 var _beigeVocals2 = _interopRequireDefault(_beigeVocals);
 
-var _blueVocals = __webpack_require__(3);
+var _blueVocals = __webpack_require__(1);
 
 var _blueVocals2 = _interopRequireDefault(_blueVocals);
 
@@ -696,271 +965,6 @@ function update() {
     _meteorVocals2.default.triggerAttack(lastSynthNote);
   }
 }
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var snare3 = new Tone.NoiseSynth({
-  "volume": -25,
-  "envelope": {
-    "attack": 0.5,
-    "decay": 0.1,
-    "sustain": 0
-  },
-  "filterEnvelope": {
-    "attack": 0.5,
-    "decay": 0.1,
-    "sustain": 0
-  }
-}).toMaster();
-
-var voice3 = new Tone.Pattern(function (time) {
-  snare3.triggerAttack(time);
-});
-
-var snare2 = new Tone.NoiseSynth({
-  "volume": -20,
-  "envelope": {
-    "attack": 0.001,
-    "decay": 0.5,
-    "sustain": 0
-  },
-  "filterEnvelope": {
-    "attack": 0.001,
-    "decay": 0.5,
-    "sustain": 0
-  }
-}).toMaster();
-
-var voice2 = new Tone.Pattern(function (time) {
-  snare2.triggerAttack(time);
-});
-
-var snare1 = new Tone.NoiseSynth({
-  "volume": -10,
-  "envelope": {
-    "attack": 0.001,
-    "decay": 0.2,
-    "sustain": 0
-  },
-  "filterEnvelope": {
-    "attack": 0.001,
-    "decay": 0.2,
-    "sustain": 0
-  }
-}).toMaster();
-
-var voice1 = new Tone.Pattern(function (time) {
-  snare1.triggerAttack(time);
-});
-
-var snare0 = new Tone.NoiseSynth({
-  "volume": -5,
-  "envelope": {
-    "attack": 0.001,
-    "decay": 0.1,
-    "sustain": 0
-  },
-  "filterEnvelope": {
-    "attack": 0.001,
-    "decay": 0.1,
-    "sustain": 0
-  }
-}).toMaster();
-
-var voice0 = new Tone.Pattern(function (time) {
-  snare0.triggerAttack(time);
-});
-
-var blueVoice = {
-  circle0: voice0,
-  circle1: voice1,
-  circle2: voice2,
-  circle3: voice3
-};
-
-exports.default = blueVoice;
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var greenSynth = new Tone.PluckSynth().toMaster();
-
-var melody0 = [['0:1:4', 'C7'], ['0:2:2', 'G8'], ['0:3:2', 'C4']];
-
-var voice0 = new Tone.Part(function (time, note) {
-  greenSynth.triggerAttackRelease(note, '4n', time);
-}, melody0);
-
-voice0.loop = true;
-
-var melody1 = [['0:1:2', 'C4'], ['0:2:2', 'C6'], ['0:3:1', 'C8']];
-
-var voice1 = new Tone.Part(function (time, note) {
-  greenSynth.triggerAttackRelease(note, '4n', time);
-}, melody1);
-
-voice1.loop = true;
-
-var melody2 = [['0:1:2', 'C2'], ['0:3:1', 'C4'], ['0:3:2', 'C8']];
-
-var voice2 = new Tone.Part(function (time, note) {
-  greenSynth.triggerAttackRelease(note, '4n', time);
-}, melody2);
-
-voice2.loop = true;
-
-var melody3 = [['0:1:2', 'D4'],
-//['0:3:1', 'C4'],
-['0:3:2', 'G2']];
-
-var voice3 = new Tone.Part(function (time, note) {
-  greenSynth.triggerAttackRelease(note, '4n', time);
-}, melody3);
-
-voice3.loop = true;
-
-var greenVoice = {
-  circle0: voice0,
-  circle1: voice1,
-  circle2: voice2,
-  circle3: voice3
-};
-
-exports.default = greenVoice;
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var stationSynth = new Tone.MembraneSynth().toMaster();
-
-var stationVoice = new Tone.Loop(function (time) {
-  stationSynth.triggerAttackRelease("F5", "8t", time);
-}, "2:1:4");
-
-exports.default = stationVoice;
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var synth = new Tone.MembraneSynth().toMaster();
-
-var voice0 = new Tone.Event(function (time, pitch) {
-  synth.triggerAttackRelease(440, "32n", time);
-}, [["1:2:2", "F6"]]);
-
-voice0.set({
-  "loop": true
-});
-
-var voice1 = new Tone.Part(function (time, pitch) {
-  synth.triggerAttackRelease(note, "4n", time);
-}, melody1);
-
-var melody1 = [['0:2:1', 'E4']];
-
-melody1.loop = true;
-
-var yellowVoice = {
-  circle0: voice0,
-  circle1: voice1,
-  circle2: voice0,
-  circle3: voice0
-};
-
-exports.default = yellowVoice;
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var kick = new Tone.MembraneSynth({
-  "envelope": {
-    "sustain": 0,
-    "attack": 0.02,
-    "decay": 0.8
-  },
-  "octaves": 10
-}).toMaster();
-
-var melody0 = [['0:1:4', 'C2'], ['0:2:4', 'C2']];
-
-var voice0 = new Tone.Part(function (time, note) {
-  kick.triggerAttackRelease(note, "32n", time);
-}, melody0);
-
-voice0.loop = true;
-voice0.volume = 30;
-
-var melody1 = [['0:1:4', 'C2'], ['0:2:2', 'C2']];
-
-var voice1 = new Tone.Part(function (time, note) {
-  kick.triggerAttackRelease(note, "16n", time);
-}, melody1);
-
-voice1.loop = true;
-voice1.volume = 30;
-
-var melody2 = [['0:1:2', 'C2'], ['0:3:2', 'C2']];
-
-var voice2 = new Tone.Part(function (time, note) {
-  kick.triggerAttackRelease(note, "32n", time);
-}, melody2);
-
-voice2.loop = true;
-voice2.volume = 30;
-
-var melody3 = [['0:1:4', 'C2']];
-
-var voice3 = new Tone.Part(function (time, note) {
-  kick.triggerAttackRelease(note, "32", time);
-}, melody3);
-
-voice3.loop = true;
-voice3.volume = 30;
-
-var pinkVoice = {
-  circle0: voice0,
-  circle1: voice1,
-  circle2: voice2,
-  circle3: voice3
-};
-
-exports.default = pinkVoice;
 
 /***/ })
 /******/ ]);

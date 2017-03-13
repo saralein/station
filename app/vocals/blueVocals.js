@@ -1,5 +1,5 @@
 var snare3 = new Tone.NoiseSynth({
-  "volume" : -50,
+  "volume" : -10,
   "envelope" : {
     "attack" : 0.5,
     "decay" : 0.1,

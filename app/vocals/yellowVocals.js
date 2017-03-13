@@ -10,19 +10,23 @@ voice0.set({
     "loop" : true,
 });
 
-let voice1 = new Tone.Part(function(time, pitch) {
-  synth.triggerAttackRelease(note, "4n", time);
-}, melody1)
+// var synth1 = new Tone.MembraneSynth({
+//   "pitchDecay": 10
+// }).toMaster();
 
-let melody1 = [
-  ['0:2:1', 'D5'],
-]
+// let voice1 = new Tone.Part(function(time, pitch) {
+//   synth1.triggerAttackRelease(440, "32n", time);
+// }, melody1)
 
-melody1.loop = true;
+// let melody1 = [
+//   ["1:2:2", "F6"],
+// ]
+
+// voice1.loop = true;
 
 let yellowVoice = {
   circle0: voice0,
-  circle1: voice1,
+  circle1: voice0,
   circle2: voice0,
   circle3: voice0,
 };

@@ -8,13 +8,12 @@ voice0.set({
     "loop" : true,
 });
 
-let voice1 = new Tone.Part(function(time, note) {
-  synth.triggerAttackRelease(note, "32n", time);
+let voice1 = new Tone.Part(function(time, pitch) {
+  synth.triggerAttackRelease(note, "4n", time);
 }, melody1)
 
 let melody1 = [
   ['0:2:1', 'E4'],
-  ['0:3:2', 'E6']
 ]
 
 melody1.loop = true;

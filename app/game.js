@@ -10,11 +10,11 @@ let width = 1400,
     height = 600,
     currentTempo = 120,
     meteorPressed = false,
-    synthNotes = ["C2", "E2", "G2", "A2",
-                  "C3", "D3", "E3", "G3",
-                  "A3", "B3", "C4", "D4",
-                  "E4", "G4", "A4", "B4",
-                  "C5"],
+    synthNotes = ['C2', 'E2', 'G2', 'A2',
+                  'C3', 'D3', 'E3', 'G3',
+                  'A3', 'B3', 'C4', 'D4',
+                  'E4', 'G4', 'A4', 'B4',
+                  'C5'],
     lastSynthNote = synthNotes[0],
     signalActive = false,
     hyperdrive,
@@ -82,7 +82,6 @@ function create() {
   circle0.lineStyle(2, 0x333333, 1);
   circle0.drawCircle(game.world.centerX, game.world.centerY, 175);
   circle0.inputEnabled = true;
-  //circle0.events.onInputOver.add(over, this)
 
   circle1 = game.add.graphics(0, 0);
   circle1.lineStyle(2, 0x333333, 1);
@@ -108,13 +107,13 @@ function create() {
       increase.input.useHandCursor = true;
       increase.events.onInputDown.add(() => tempo('increase'), this);
 
-  let style = {font: "18px 'VT323'", fill: "#ffffff"};
+  let style = {font: "18px 'VT323'", fill: '#ffffff'};
 
-  hyperdrive = game.add.text(game.world.centerX + 170, 563, "hyperdrive", style);
+  hyperdrive = game.add.text(game.world.centerX + 170, 563, 'hyperdrive', style);
   hyperdrive.anchor.set(0.5, 0.5);
   hyperdrive.visible = false;
 
-  docking = game.add.text(game.world.centerX - 170, 563, "docking", style);
+  docking = game.add.text(game.world.centerX - 170, 563, 'docking', style);
   docking.anchor.set(0.5, 0.5);
   docking.visible = false;
 
@@ -150,7 +149,6 @@ function create() {
   alienPink.inputEnabled = true;
   alienPink.input.enableDrag(true);
   alienPink.events.onInputUp.add(() => setCurrentAlien(pinkVoice, pink));
-  //game.physics.enable(alienPink, Phaser.Physics.ARCADE);
 
   alienYellow = game.add.sprite(150, 215, 'alienYellow');
   alienYellow.visible = false;
@@ -203,21 +201,10 @@ function create() {
   meteor.events.onInputDown.add(startMeteor, this);
   meteor.events.onInputUp.add(stopMeteor, this);
 
-  alienYellow.inputEnabled = true;
-  alienYellow.input.enableDrag(true);
-  alienYellow.events.onInputUp.add(mouseCords, this);
-
-  alienGreen.inputEnabled = true;
-  alienGreen.input.enableDrag(true);
-
-  alienBlue.inputEnabled = true;
-  alienBlue.input.enableDrag(true);
-
-  alienBeige.inputEnabled = true;
-  alienBeige.input.enableDrag(true);
-
   Tone.Transport.start('+0.1');
   Tone.Transport.bpm.rampTo(currentTempo, 0);
+
+  meteor.bringToTop();
 
 }
 
@@ -231,38 +218,32 @@ function collisionHandler(voice, obj, xCoord, yCoord) {
 
   if (circle0.getBounds().contains(xCoord, yCoord)){
     obj.current = voice.circle0;
-    obj.current.start("@1m");
+    obj.current.start('@1m');
   } else if (circle1.getBounds().contains(xCoord, yCoord)) {
     obj.current = voice.circle1;
-    obj.current.start("@1m");
+    obj.current.start('@1m');
   } else if (circle2.getBounds().contains(xCoord, yCoord)) {
     obj.current = voice.circle2;
-    obj.current.start("@1m");
+    obj.current.start('@1m');
   } else if (circle3.getBounds().contains(xCoord, yCoord)) {
     obj.current = voice.circle3;
-    obj.current.start("@1m");
+    obj.current.start('@1m');
   }
 }
 
 function mouseCords() {
   [xCoord, yCoord] = [game.input.mousePointer.x, game.input.mousePointer.y];
-  console.log('X', xCoord);
-  console.log('Y', yCoord);
-}
-
-function over() {
-  console.log('yes');
 }
 
 function tempo(action) {
-  if (action === 'increase' && currentTempo < 300) {
+  if (action === 'increase' && currentTempo < 240) {
     currentTempo += 30;
     docking.visible = false;
   } else if (action === 'decrease' && currentTempo > 60) {
     currentTempo -= 30
     hyperdrive.visible = false;
   }
-  if (currentTempo === 300) {
+  if (currentTempo === 240) {
     hyperdrive.visible = true;
   }
   if (currentTempo === 60) {
@@ -279,52 +260,11 @@ function signal() {
     stationVoice.stop();
     redrawCircles(0x333333);
   }
+
   signalActive = !signalActive;
 }
 
-function activeCircles() {
-
-  let time = this.game.time.totalElapsedSeconds() * 1000
-
-  window.setInterval(function() {
-    circle0 = game.add.graphics(0, 0);
-    circle0.lineStyle(2, 0x888888, 1);
-    circle0.drawCircle(game.world.centerX, game.world.centerY, 175);
-    bringUp();
-  }, 0);
-
-  window.setInterval(function() {
-    console.log('hi');
-    circle1 = game.add.graphics(0, 0);
-    circle1.lineStyle(2, 0x888888, 1);
-    circle1.drawCircle(game.world.centerX, game.world.centerY, 450);
-    bringUp();
-  }, time + 1000);
-
-  window.setInterval(function() {
-    console.log('hi');
-    circle2 = game.add.graphics(0, 0);
-    circle2.lineStyle(2, 0x888888, 1);
-    circle2.drawCircle(game.world.centerX, game.world.centerY, 800);
-    bringUp();
-  }, time + 2000);
-
-  window.setInterval(function() {
-    console.log('hi');
-    circle3 = game.add.graphics(0, 0);
-    circle3.lineStyle(2, 0x888888, 1);
-    circle3.drawCircle(game.world.centerX, game.world.centerY, 1250);
-    bringUp();
-  }, time + 3000);
-
-  window.setInterval(function() {
-    redrawCircles(0x333333);
-  }, time + 4000);
-
-}
-
 function redrawCircles(color) {
-
   circle0 = game.add.graphics(0, 0);
   circle0.lineStyle(2, color, 1);
   circle0.drawCircle(game.world.centerX, game.world.centerY, 175);
@@ -342,7 +282,6 @@ function redrawCircles(color) {
   circle3.drawCircle(game.world.centerX, game.world.centerY, 1250);
 
   bringUp();
-
 }
 
 function bringUp() {
@@ -364,10 +303,6 @@ function stopMeteor() {
   rock.triggerRelease();
 }
 
-// function mouseCords() {
-//   console.log(game.input.mousePointer.x, game.input.mousePointer.y);
-// }
-
 function generateSprite(sprite, obj) {
   sprite.visible = !sprite.visible;
   if (sprite.visible) {
@@ -377,12 +312,8 @@ function generateSprite(sprite, obj) {
   }
 }
 
-
 function update() {
-
-  //game.physics.arcade.overlap(circle0, alienPink, () => collisionHandler(alienPink, currentPinkVoice), null, this);
-
-  if (meteorPressed == true) {
+  if (meteorPressed === true) {
     let x = game.input.mousePointer.x,
         y = game.input.mousePointer.y,
         l = synthNotes.length,

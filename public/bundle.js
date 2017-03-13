@@ -734,7 +734,64 @@ function create() {
   Tone.Transport.bpm.rampTo(currentTempo, 0);
 
   meteor.bringToTop();
+  //bob();
+
+  //game.time.events.loop(Phaser.Timer.SECOND, bob, this)
+  var pinkTween = game.add.tween(alienPink).to({ x: alienPink.x, y: alienPink.y + 0.6 }, 800, Phaser.Easing.Quadratic.InOut, true);
+  pinkTween.onComplete.add(function () {
+    alienPink.y = alienPink.y - 0.4;
+    pinkTween.start();
+  });
+  pinkTween.start();
+
+  var yellowTween = game.add.tween(alienYellow).to({ x: alienYellow.x, y: alienYellow.y - 0.4 }, 800, Phaser.Easing.Quadratic.InOut, true);
+  yellowTween.onComplete.add(function () {
+    alienYellow.y = alienYellow.y + 0.4;
+    yellowTween.start();
+  });
+  yellowTween.start();
+
+  var greenTween = game.add.tween(alienGreen).to({ x: alienGreen.x, y: alienGreen.y + 0.4 }, 800, Phaser.Easing.Quadratic.InOut, true);
+  greenTween.onComplete.add(function () {
+    alienGreen.y = alienGreen.y - 0.4;
+    greenTween.start();
+  });
+  greenTween.start();
+
+  var blueTween = game.add.tween(alienBlue).to({ x: alienBlue.x, y: alienBlue.y - 0.4 }, 800, Phaser.Easing.Quadratic.InOut, true);
+  blueTween.onComplete.add(function () {
+    alienBlue.y = alienBlue.y + 0.4;
+    blueTween.start();
+  });
+  blueTween.start();
+
+  var beigeTween = game.add.tween(alienBeige).to({ x: alienBeige.x, y: alienBeige.y + 0.4 }, 800, Phaser.Easing.Quadratic.InOut, true);
+  beigeTween.onComplete.add(function () {
+    alienBeige.y = alienBeige.y - 0.4;
+    beigeTween.start();
+  });
+  beigeTween.start();
 }
+
+// function bob() {
+//   game.add.tween(alienPink).to({x: alienPink.x, y: alienPink.y + 5}, game.time.totalElapsedSeconds() + 1000, Phaser.Easing.Quadratic.InOut, true);
+//   game.add.tween(alienPink).to({x: alienPink.x, y: alienPink.y - 5}, game.time.totalElapsedSeconds() + 1000, Phaser.Easing.Quadratic.InOut, true);
+//   game.add.tween(alienPink).to({x: alienPink.x, y: alienPink.y - 5}, game.time.totalElapsedSeconds() + 2000, Phaser.Easing.Quadratic.InOut, true);
+//   game.add.tween(alienPink).to({x: alienPink.x, y: alienPink.y - 10}, game.time.totalElapsedSeconds() + 2000, Phaser.Easing.Quadratic.InOut, true);
+//   game.add.tween(alienPink).to({x: alienPink.x, y: alienPink.y + 5}, game.time.totalElapsedSeconds() + 2000, Phaser.Easing.Quadratic.InOut, true);
+// }
+
+// var game = new Phaser.Game(800, 600, Phaser.AUTO, 'phaser-example', { preload: preload, create: create });
+
+// function preload() {    game.load.image('sprite', 'sprite.png');}
+
+// function create() {
+//   var sprite = game.add.sprite(100, 100, 'sprite');
+//   var demoTween = game.add.tween(sprite).to({x:400,y:400},1000);
+//   demoTween.onComplete.add(function(){
+//     sprite.x = 100; sprite.y = 100;
+//     demoTween.start();});
+//   demoTween.start();}
 
 function setCurrentAlien(voice, obj) {
   obj.current.stop();

@@ -10,6 +10,10 @@ A rhythm-based, space-themed game designed with an emphasis on user interaction.
 * [Phaser](https://phaser.io/)
 * [Tone.js](https://tonejs.github.io/)
 
+## Author
+
+This project was created by Sara Trujillo as part of the curriculum of [Fullstack Academy](https://www.fullstackacademy.com/).
+
 ## Acknowledgments
 
 Station features art from [http://kenney.nl/](http://kenney.nl/).
